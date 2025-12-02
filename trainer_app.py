@@ -108,7 +108,11 @@ def require_auth(f):
 
 
 class UserProgress:
-    """Класс для управления прогрессом пользователя"""
+    """Класс для управления прогрессом пользователя.
+    
+    Данные всегда читаются с диска перед операциями чтения,
+    чтобы обеспечить синхронизацию между разными устройствами.
+    """
     
     def __init__(self, progress_file: str):
         self.progress_file = progress_file
@@ -117,10 +121,9 @@ class UserProgress:
         progress_dir = os.path.dirname(progress_file)
         if progress_dir:
             os.makedirs(progress_dir, exist_ok=True)
-        self.load()
     
     def load(self):
-        """Загрузка прогресса из файла"""
+        """Загрузка прогресса из файла (вызывается перед каждой операцией)"""
         try:
             if os.path.exists(self.progress_file):
                 with open(self.progress_file, 'r', encoding='utf-8') as f:
@@ -132,15 +135,24 @@ class UserProgress:
             self.data = {}
     
     def save(self):
-        """Сохранение прогресса в файл"""
+        """Атомарное сохранение прогресса в файл"""
         try:
-            with open(self.progress_file, 'w', encoding='utf-8') as f:
+            # Сначала пишем во временный файл, потом переименовываем (атомарная операция)
+            temp_file = self.progress_file + '.tmp'
+            with open(temp_file, 'w', encoding='utf-8') as f:
                 json.dump(self.data, f, ensure_ascii=False, indent=2)
+            # Атомарная замена файла
+            os.replace(temp_file, self.progress_file)
         except Exception as e:
             logging.error(f"Ошибка сохранения прогресса: {e}")
+            # Удаляем временный файл при ошибке
+            if os.path.exists(temp_file):
+                os.remove(temp_file)
     
     def get_question_progress(self, exam_name: str, question_id: str) -> Dict:
         """Получение прогресса по вопросу"""
+        # Перечитываем данные с диска для синхронизации между устройствами
+        self.load()
         exam_progress = self.data.get(exam_name, {})
         return exam_progress.get(question_id, {
             "attempts": 0,
@@ -152,6 +164,9 @@ class UserProgress:
     
     def update_question_progress(self, exam_name: str, question_id: str, is_correct: bool, dont_know: bool = False):
         """Обновление прогресса по вопросу"""
+        # Перечитываем данные с диска, чтобы не потерять изменения с другого устройства
+        self.load()
+        
         if exam_name not in self.data:
             self.data[exam_name] = {}
         
@@ -185,6 +200,9 @@ class UserProgress:
     
     def set_mastered(self, exam_name: str, question_id: str, mastered: bool):
         """Установка/снятие отметки "Усвоен" """
+        # Перечитываем данные с диска, чтобы не потерять изменения с другого устройства
+        self.load()
+        
         if exam_name not in self.data:
             self.data[exam_name] = {}
         
@@ -207,6 +225,8 @@ class UserProgress:
     
     def get_exam_statistics(self, exam_name: str, verified_question_ids: List[str]) -> Dict:
         """Получение статистики по экзамену"""
+        # Перечитываем данные с диска для синхронизации между устройствами
+        self.load()
         exam_progress = self.data.get(exam_name, {})
         
         total_verified = len(verified_question_ids)
@@ -238,6 +258,8 @@ class UserProgress:
     
     def get_section_statistics(self, exam_name: str, questions: List[Question]) -> List[Dict]:
         """Получение статистики по разделам"""
+        # Перечитываем данные с диска для синхронизации между устройствами
+        self.load()
         exam_progress = self.data.get(exam_name, {})
         
         sections: Dict[int, Dict] = {}
