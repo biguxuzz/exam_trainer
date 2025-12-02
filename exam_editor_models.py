@@ -44,6 +44,7 @@ class Question:
     is_verified: bool = False  # Ответ проверен
     question_number: Optional[str] = None  # Номер вопроса вида "1.16"
     section_number: Optional[int] = None  # Номер раздела (1-14)
+    section_name: Optional[str] = None  # Название раздела
     question_number_in_section: Optional[int] = None  # Номер вопроса в разделе
     exam_name: Optional[str] = None  # Название экзамена (например, "1С:Руководитель проекта" или "Основы менеджмента")
     
@@ -58,6 +59,7 @@ class Question:
             "is_verified": self.is_verified,
             "question_number": self.question_number,
             "section_number": self.section_number,
+            "section_name": self.section_name,
             "question_number_in_section": self.question_number_in_section,
             "exam_name": self.exam_name
         }
@@ -75,6 +77,7 @@ class Question:
             is_verified=data.get("is_verified", False),
             question_number=data.get("question_number"),
             section_number=data.get("section_number"),
+            section_name=data.get("section_name"),
             question_number_in_section=data.get("question_number_in_section"),
             exam_name=data.get("exam_name")
         )
@@ -125,7 +128,7 @@ class QuestionBank:
                     "exams": [
                         {
                             "name": "1С:Руководитель проекта",
-                            "file": "sources/1c_exam_questions.json",
+                            "file": "sources/rp_exam_questions.json",
                             "description": "Экзамен по управлению проектами в 1С"
                         }
                     ]
@@ -149,11 +152,11 @@ class QuestionBank:
         # Если экзамен не найден, возвращаем первый доступный или значение по умолчанию
         exams = config.get("exams", [])
         if exams:
-            file_path = exams[0].get("file", "sources/1c_exam_questions.json")
+            file_path = exams[0].get("file", "sources/rp_exam_questions.json")
             if not os.path.isabs(file_path):
                 return os.path.join(cls.BASE_DIR, file_path)
             return file_path
-        default_path = os.path.join(cls.BASE_DIR, "sources", "1c_exam_questions.json")
+        default_path = os.path.join(cls.BASE_DIR, "sources", "rp_exam_questions.json")
         return default_path
     
     def load_questions(self):
@@ -333,54 +336,17 @@ class QuestionBank:
         return sorted(sections.values(), key=lambda x: x["number"])
     
     def get_section_name(self, section_number: int, exam_name: Optional[str] = None) -> str:
-        """Получение названия раздела по номеру для конкретного экзамена"""
+        """Получение названия раздела по номеру для конкретного экзамена.
+        Названия секций берутся из загруженных вопросов (поле section_name в JSON)."""
         if exam_name is None:
             exam_name = self.exam_name
         
-        # Темы для экзамена "1С:Руководитель проекта"
-        rp_section_names = {
-            1: "Определения, деятельность, цели, ценности",
-            2: "Организационная структура",
-            3: "Жизненный цикл проекта, процессы проекта",
-            4: "Принципы управления проектом",
-            5: "Домен «Заинтересованные стороны»",
-            6: "Домен «Команда»",
-            7: "Домен «Подход к разработке и жизненный цикл»",
-            8: "Домен «Планирование»",
-            9: "Домен «Работа проекта»",
-            10: "Домен «Поставка»",
-            11: "Домен «Измерение»",
-            12: "Домен «Неопределенность»",
-            13: "Адаптация",
-            14: "Модели, методы, артефакты"
-        }
+        # Ищем название секции в загруженных вопросах
+        for q in self.questions:
+            if q.exam_name == exam_name and q.section_number == section_number and q.section_name:
+                return q.section_name
         
-        # Темы для экзамена "Основы менеджмента"
-        # TODO: Заменить на правильные темы из osnovy_new.xlsx
-        osnovy_section_names = {
-            1: "Управление и менеджмент",
-            2: "Организационная структура",
-            3: "Функции управления",
-            4: "Стили управления",
-            5: "Мотивация",
-            6: "Коммуникации в организации",
-            7: "Конфликты в организации",
-            8: "Управление изменениями",
-            9: "Лидерство",
-            10: "Принятие решений",
-            11: "Контроль и оценка",
-            12: "Управление качеством",
-            13: "Стратегическое управление"
-        }
-        
-        # Выбираем словарь тем в зависимости от экзамена
-        if exam_name == "Основы менеджмента":
-            section_names = osnovy_section_names
-        else:
-            # По умолчанию используем темы для "1С:Руководитель проекта"
-            section_names = rp_section_names
-        
-        return section_names.get(section_number, f"Раздел {section_number}")
+        return f"Раздел {section_number}"
     
     def get_statistics(self) -> Dict:
         """Получение статистики"""

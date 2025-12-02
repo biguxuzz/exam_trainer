@@ -34,7 +34,8 @@
     "is_verified": true,
     "question_number": "1.1",
     "section_number": 1,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0002",
@@ -71,7 +72,8 @@
     "is_verified": true,
     "question_number": "1.2",
     "section_number": 1,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0003",
@@ -108,7 +110,8 @@
     "is_verified": true,
     "question_number": "1.3",
     "section_number": 1,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0004",
@@ -145,7 +148,8 @@
     "is_verified": true,
     "question_number": "1.4",
     "section_number": 1,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0005",
@@ -182,7 +186,8 @@
     "is_verified": true,
     "question_number": "1.5",
     "section_number": 1,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0006",
@@ -219,7 +224,8 @@
     "is_verified": true,
     "question_number": "1.6",
     "section_number": 1,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0007",
@@ -256,7 +262,8 @@
     "is_verified": true,
     "question_number": "1.7",
     "section_number": 1,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0008",
@@ -293,7 +300,8 @@
     "is_verified": true,
     "question_number": "1.8",
     "section_number": 1,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0009",
@@ -330,7 +338,8 @@
     "is_verified": true,
     "question_number": "1.9",
     "section_number": 1,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0010",
@@ -367,7 +376,8 @@
     "is_verified": true,
     "question_number": "1.10",
     "section_number": 1,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0011",
@@ -404,7 +414,8 @@
     "is_verified": true,
     "question_number": "1.11",
     "section_number": 1,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0012",
@@ -441,7 +452,8 @@
     "is_verified": true,
     "question_number": "1.12",
     "section_number": 1,
-    "question_number_in_section": 12
+    "question_number_in_section": 12,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0013",
@@ -478,7 +490,8 @@
     "is_verified": true,
     "question_number": "1.13",
     "section_number": 1,
-    "question_number_in_section": 13
+    "question_number_in_section": 13,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0014",
@@ -515,7 +528,8 @@
     "is_verified": true,
     "question_number": "1.14",
     "section_number": 1,
-    "question_number_in_section": 14
+    "question_number_in_section": 14,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0015",
@@ -552,7 +566,8 @@
     "is_verified": true,
     "question_number": "1.15",
     "section_number": 1,
-    "question_number_in_section": 15
+    "question_number_in_section": 15,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0016",
@@ -589,7 +604,8 @@
     "is_verified": true,
     "question_number": "1.16",
     "section_number": 1,
-    "question_number_in_section": 16
+    "question_number_in_section": 16,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0017",
@@ -626,7 +642,8 @@
     "is_verified": true,
     "question_number": "1.17",
     "section_number": 1,
-    "question_number_in_section": 17
+    "question_number_in_section": 17,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0018",
@@ -675,7 +692,8 @@
     "is_verified": true,
     "question_number": "1.18",
     "section_number": 1,
-    "question_number_in_section": 18
+    "question_number_in_section": 18,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0019",
@@ -718,7 +736,8 @@
     "is_verified": true,
     "question_number": "1.19",
     "section_number": 1,
-    "question_number_in_section": 19
+    "question_number_in_section": 19,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0020",
@@ -755,7 +774,8 @@
     "is_verified": true,
     "question_number": "1.20",
     "section_number": 1,
-    "question_number_in_section": 20
+    "question_number_in_section": 20,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0021",
@@ -792,7 +812,8 @@
     "is_verified": true,
     "question_number": "1.21",
     "section_number": 1,
-    "question_number_in_section": 21
+    "question_number_in_section": 21,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0022",
@@ -841,7 +862,8 @@
     "is_verified": true,
     "question_number": "1.22",
     "section_number": 1,
-    "question_number_in_section": 22
+    "question_number_in_section": 22,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0023",
@@ -890,7 +912,8 @@
     "is_verified": true,
     "question_number": "1.23",
     "section_number": 1,
-    "question_number_in_section": 23
+    "question_number_in_section": 23,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0024",
@@ -927,7 +950,8 @@
     "is_verified": true,
     "question_number": "1.24",
     "section_number": 1,
-    "question_number_in_section": 24
+    "question_number_in_section": 24,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0025",
@@ -964,7 +988,8 @@
     "is_verified": true,
     "question_number": "1.25",
     "section_number": 1,
-    "question_number_in_section": 25
+    "question_number_in_section": 25,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0026",
@@ -1001,7 +1026,8 @@
     "is_verified": true,
     "question_number": "1.26",
     "section_number": 1,
-    "question_number_in_section": 26
+    "question_number_in_section": 26,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0027",
@@ -1038,7 +1064,8 @@
     "is_verified": true,
     "question_number": "1.27",
     "section_number": 1,
-    "question_number_in_section": 27
+    "question_number_in_section": 27,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0028",
@@ -1075,7 +1102,8 @@
     "is_verified": true,
     "question_number": "1.28",
     "section_number": 1,
-    "question_number_in_section": 28
+    "question_number_in_section": 28,
+    "section_name": "Определения, деятельность, цели, ценности"
   },
   {
     "id": "q_0029",
@@ -1112,7 +1140,8 @@
     "is_verified": true,
     "question_number": "2.1",
     "section_number": 2,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0030",
@@ -1149,7 +1178,8 @@
     "is_verified": true,
     "question_number": "2.2",
     "section_number": 2,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0031",
@@ -1186,7 +1216,8 @@
     "is_verified": true,
     "question_number": "2.3",
     "section_number": 2,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0032",
@@ -1223,7 +1254,8 @@
     "is_verified": true,
     "question_number": "2.4",
     "section_number": 2,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0033",
@@ -1260,7 +1292,8 @@
     "is_verified": true,
     "question_number": "2.5",
     "section_number": 2,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0034",
@@ -1297,7 +1330,8 @@
     "is_verified": true,
     "question_number": "2.6",
     "section_number": 2,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0035",
@@ -1334,7 +1368,8 @@
     "is_verified": true,
     "question_number": "2.7",
     "section_number": 2,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0036",
@@ -1371,7 +1406,8 @@
     "is_verified": true,
     "question_number": "2.8",
     "section_number": 2,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0037",
@@ -1408,7 +1444,8 @@
     "is_verified": true,
     "question_number": "2.9",
     "section_number": 2,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0038",
@@ -1445,7 +1482,8 @@
     "is_verified": true,
     "question_number": "2.10",
     "section_number": 2,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0039",
@@ -1482,7 +1520,8 @@
     "is_verified": true,
     "question_number": "2.11",
     "section_number": 2,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0040",
@@ -1519,7 +1558,8 @@
     "is_verified": true,
     "question_number": "2.12",
     "section_number": 2,
-    "question_number_in_section": 12
+    "question_number_in_section": 12,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0041",
@@ -1556,7 +1596,8 @@
     "is_verified": true,
     "question_number": "2.13",
     "section_number": 2,
-    "question_number_in_section": 13
+    "question_number_in_section": 13,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0042",
@@ -1593,7 +1634,8 @@
     "is_verified": true,
     "question_number": "2.14",
     "section_number": 2,
-    "question_number_in_section": 14
+    "question_number_in_section": 14,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0043",
@@ -1630,7 +1672,8 @@
     "is_verified": true,
     "question_number": "2.15",
     "section_number": 2,
-    "question_number_in_section": 15
+    "question_number_in_section": 15,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0044",
@@ -1667,7 +1710,8 @@
     "is_verified": true,
     "question_number": "2.16",
     "section_number": 2,
-    "question_number_in_section": 16
+    "question_number_in_section": 16,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0045",
@@ -1704,7 +1748,8 @@
     "is_verified": true,
     "question_number": "2.17",
     "section_number": 2,
-    "question_number_in_section": 17
+    "question_number_in_section": 17,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0046",
@@ -1741,7 +1786,8 @@
     "is_verified": true,
     "question_number": "2.18",
     "section_number": 2,
-    "question_number_in_section": 18
+    "question_number_in_section": 18,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0047",
@@ -1778,7 +1824,8 @@
     "is_verified": true,
     "question_number": "2.19",
     "section_number": 2,
-    "question_number_in_section": 19
+    "question_number_in_section": 19,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0048",
@@ -1815,7 +1862,8 @@
     "is_verified": true,
     "question_number": "2.20",
     "section_number": 2,
-    "question_number_in_section": 20
+    "question_number_in_section": 20,
+    "section_name": "Организационная структура"
   },
   {
     "id": "q_0049",
@@ -1852,7 +1900,8 @@
     "is_verified": true,
     "question_number": "3.1",
     "section_number": 3,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0050",
@@ -1889,7 +1938,8 @@
     "is_verified": true,
     "question_number": "3.2",
     "section_number": 3,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0051",
@@ -1926,7 +1976,8 @@
     "is_verified": true,
     "question_number": "3.3",
     "section_number": 3,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0052",
@@ -1963,7 +2014,8 @@
     "is_verified": true,
     "question_number": "3.4",
     "section_number": 3,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0053",
@@ -2000,7 +2052,8 @@
     "is_verified": true,
     "question_number": "3.5",
     "section_number": 3,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0054",
@@ -2037,7 +2090,8 @@
     "is_verified": true,
     "question_number": "3.6",
     "section_number": 3,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0055",
@@ -2074,7 +2128,8 @@
     "is_verified": true,
     "question_number": "3.7",
     "section_number": 3,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0056",
@@ -2111,7 +2166,8 @@
     "is_verified": true,
     "question_number": "3.8",
     "section_number": 3,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0057",
@@ -2148,7 +2204,8 @@
     "is_verified": true,
     "question_number": "3.9",
     "section_number": 3,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0058",
@@ -2185,7 +2242,8 @@
     "is_verified": true,
     "question_number": "3.10",
     "section_number": 3,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0059",
@@ -2222,7 +2280,8 @@
     "is_verified": true,
     "question_number": "3.11",
     "section_number": 3,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0060",
@@ -2259,7 +2318,8 @@
     "is_verified": true,
     "question_number": "3.12",
     "section_number": 3,
-    "question_number_in_section": 12
+    "question_number_in_section": 12,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0061",
@@ -2296,7 +2356,8 @@
     "is_verified": true,
     "question_number": "3.13",
     "section_number": 3,
-    "question_number_in_section": 13
+    "question_number_in_section": 13,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0062",
@@ -2333,7 +2394,8 @@
     "is_verified": true,
     "question_number": "3.14",
     "section_number": 3,
-    "question_number_in_section": 14
+    "question_number_in_section": 14,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0063",
@@ -2370,7 +2432,8 @@
     "is_verified": true,
     "question_number": "3.15",
     "section_number": 3,
-    "question_number_in_section": 15
+    "question_number_in_section": 15,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0064",
@@ -2407,7 +2470,8 @@
     "is_verified": true,
     "question_number": "3.16",
     "section_number": 3,
-    "question_number_in_section": 16
+    "question_number_in_section": 16,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0065",
@@ -2444,7 +2508,8 @@
     "is_verified": true,
     "question_number": "3.17",
     "section_number": 3,
-    "question_number_in_section": 17
+    "question_number_in_section": 17,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0066",
@@ -2481,7 +2546,8 @@
     "is_verified": true,
     "question_number": "3.18",
     "section_number": 3,
-    "question_number_in_section": 18
+    "question_number_in_section": 18,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0067",
@@ -2518,7 +2584,8 @@
     "is_verified": true,
     "question_number": "3.19",
     "section_number": 3,
-    "question_number_in_section": 19
+    "question_number_in_section": 19,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0068",
@@ -2555,7 +2622,8 @@
     "is_verified": true,
     "question_number": "3.20",
     "section_number": 3,
-    "question_number_in_section": 20
+    "question_number_in_section": 20,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0069",
@@ -2592,7 +2660,8 @@
     "is_verified": true,
     "question_number": "3.21",
     "section_number": 3,
-    "question_number_in_section": 21
+    "question_number_in_section": 21,
+    "section_name": "Жизненный цикл проекта, процессы проекта"
   },
   {
     "id": "q_0070",
@@ -2629,7 +2698,8 @@
     "is_verified": true,
     "question_number": "4.1",
     "section_number": 4,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0071",
@@ -2678,7 +2748,8 @@
     "is_verified": true,
     "question_number": "4.2",
     "section_number": 4,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0072",
@@ -2727,7 +2798,8 @@
     "is_verified": true,
     "question_number": "4.3",
     "section_number": 4,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0073",
@@ -2776,7 +2848,8 @@
     "is_verified": true,
     "question_number": "4.4",
     "section_number": 4,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0074",
@@ -2825,7 +2898,8 @@
     "is_verified": true,
     "question_number": "4.5",
     "section_number": 4,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0075",
@@ -2874,7 +2948,8 @@
     "is_verified": true,
     "question_number": "4.6",
     "section_number": 4,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0076",
@@ -2911,7 +2986,8 @@
     "is_verified": true,
     "question_number": "4.7",
     "section_number": 4,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0077",
@@ -2948,7 +3024,8 @@
     "is_verified": true,
     "question_number": "4.8",
     "section_number": 4,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0078",
@@ -2985,7 +3062,8 @@
     "is_verified": true,
     "question_number": "4.9",
     "section_number": 4,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0079",
@@ -3034,7 +3112,8 @@
     "is_verified": true,
     "question_number": "4.10",
     "section_number": 4,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0080",
@@ -3083,7 +3162,8 @@
     "is_verified": true,
     "question_number": "4.11",
     "section_number": 4,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0081",
@@ -3132,7 +3212,8 @@
     "is_verified": true,
     "question_number": "4.12",
     "section_number": 4,
-    "question_number_in_section": 12
+    "question_number_in_section": 12,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0082",
@@ -3169,7 +3250,8 @@
     "is_verified": true,
     "question_number": "4.13",
     "section_number": 4,
-    "question_number_in_section": 13
+    "question_number_in_section": 13,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0083",
@@ -3218,7 +3300,8 @@
     "is_verified": true,
     "question_number": "4.14",
     "section_number": 4,
-    "question_number_in_section": 14
+    "question_number_in_section": 14,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0084",
@@ -3267,7 +3350,8 @@
     "is_verified": true,
     "question_number": "4.15",
     "section_number": 4,
-    "question_number_in_section": 15
+    "question_number_in_section": 15,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0085",
@@ -3304,7 +3388,8 @@
     "is_verified": true,
     "question_number": "4.16",
     "section_number": 4,
-    "question_number_in_section": 16
+    "question_number_in_section": 16,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0086",
@@ -3353,7 +3438,8 @@
     "is_verified": true,
     "question_number": "4.17",
     "section_number": 4,
-    "question_number_in_section": 17
+    "question_number_in_section": 17,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0087",
@@ -3402,7 +3488,8 @@
     "is_verified": true,
     "question_number": "4.18",
     "section_number": 4,
-    "question_number_in_section": 18
+    "question_number_in_section": 18,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0088",
@@ -3439,7 +3526,8 @@
     "is_verified": true,
     "question_number": "4.19",
     "section_number": 4,
-    "question_number_in_section": 19
+    "question_number_in_section": 19,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0089",
@@ -3488,7 +3576,8 @@
     "is_verified": true,
     "question_number": "4.20",
     "section_number": 4,
-    "question_number_in_section": 20
+    "question_number_in_section": 20,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0090",
@@ -3537,7 +3626,8 @@
     "is_verified": true,
     "question_number": "4.21",
     "section_number": 4,
-    "question_number_in_section": 21
+    "question_number_in_section": 21,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0091",
@@ -3574,7 +3664,8 @@
     "is_verified": true,
     "question_number": "4.22",
     "section_number": 4,
-    "question_number_in_section": 22
+    "question_number_in_section": 22,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0092",
@@ -3623,7 +3714,8 @@
     "is_verified": true,
     "question_number": "4.23",
     "section_number": 4,
-    "question_number_in_section": 23
+    "question_number_in_section": 23,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0093",
@@ -3672,7 +3764,8 @@
     "is_verified": true,
     "question_number": "4.24",
     "section_number": 4,
-    "question_number_in_section": 24
+    "question_number_in_section": 24,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0094",
@@ -3721,7 +3814,8 @@
     "is_verified": true,
     "question_number": "4.25",
     "section_number": 4,
-    "question_number_in_section": 25
+    "question_number_in_section": 25,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0095",
@@ -3770,7 +3864,8 @@
     "is_verified": true,
     "question_number": "4.26",
     "section_number": 4,
-    "question_number_in_section": 26
+    "question_number_in_section": 26,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0096",
@@ -3819,7 +3914,8 @@
     "is_verified": true,
     "question_number": "4.27",
     "section_number": 4,
-    "question_number_in_section": 27
+    "question_number_in_section": 27,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0097",
@@ -3856,7 +3952,8 @@
     "is_verified": true,
     "question_number": "4.28",
     "section_number": 4,
-    "question_number_in_section": 28
+    "question_number_in_section": 28,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0098",
@@ -3905,7 +4002,8 @@
     "is_verified": true,
     "question_number": "4.29",
     "section_number": 4,
-    "question_number_in_section": 29
+    "question_number_in_section": 29,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0099",
@@ -3954,7 +4052,8 @@
     "is_verified": true,
     "question_number": "4.30",
     "section_number": 4,
-    "question_number_in_section": 30
+    "question_number_in_section": 30,
+    "section_name": "Принципы управления проектом"
   },
   {
     "id": "q_0100",
@@ -3991,7 +4090,8 @@
     "is_verified": true,
     "question_number": "5.1",
     "section_number": 5,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0101",
@@ -4040,7 +4140,8 @@
     "is_verified": true,
     "question_number": "5.2",
     "section_number": 5,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0102",
@@ -4077,7 +4178,8 @@
     "is_verified": true,
     "question_number": "5.3",
     "section_number": 5,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0103",
@@ -4114,7 +4216,8 @@
     "is_verified": true,
     "question_number": "5.4",
     "section_number": 5,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0104",
@@ -4151,7 +4254,8 @@
     "is_verified": true,
     "question_number": "5.5",
     "section_number": 5,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0105",
@@ -4200,7 +4304,8 @@
     "is_verified": true,
     "question_number": "5.6",
     "section_number": 5,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0106",
@@ -4237,7 +4342,8 @@
     "is_verified": true,
     "question_number": "5.7",
     "section_number": 5,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0107",
@@ -4286,7 +4392,8 @@
     "is_verified": true,
     "question_number": "5.8",
     "section_number": 5,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0108",
@@ -4335,7 +4442,8 @@
     "is_verified": true,
     "question_number": "5.9",
     "section_number": 5,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0109",
@@ -4372,7 +4480,8 @@
     "is_verified": true,
     "question_number": "5.10",
     "section_number": 5,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0110",
@@ -4409,7 +4518,8 @@
     "is_verified": true,
     "question_number": "5.11",
     "section_number": 5,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0111",
@@ -4446,7 +4556,8 @@
     "is_verified": true,
     "question_number": "5.12",
     "section_number": 5,
-    "question_number_in_section": 12
+    "question_number_in_section": 12,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0112",
@@ -4483,7 +4594,8 @@
     "is_verified": true,
     "question_number": "5.13",
     "section_number": 5,
-    "question_number_in_section": 13
+    "question_number_in_section": 13,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0113",
@@ -4520,7 +4632,8 @@
     "is_verified": true,
     "question_number": "5.14",
     "section_number": 5,
-    "question_number_in_section": 14
+    "question_number_in_section": 14,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0114",
@@ -4557,7 +4670,8 @@
     "is_verified": true,
     "question_number": "5.15",
     "section_number": 5,
-    "question_number_in_section": 15
+    "question_number_in_section": 15,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0115",
@@ -4594,7 +4708,8 @@
     "is_verified": true,
     "question_number": "5.16",
     "section_number": 5,
-    "question_number_in_section": 16
+    "question_number_in_section": 16,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0116",
@@ -4631,7 +4746,8 @@
     "is_verified": true,
     "question_number": "5.17",
     "section_number": 5,
-    "question_number_in_section": 17
+    "question_number_in_section": 17,
+    "section_name": "Домен 'Заинтересованные стороны'"
   },
   {
     "id": "q_0117",
@@ -4668,7 +4784,8 @@
     "is_verified": true,
     "question_number": "6.1",
     "section_number": 6,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Домен 'Команда'"
   },
   {
     "id": "q_0118",
@@ -4717,7 +4834,8 @@
     "is_verified": true,
     "question_number": "6.2",
     "section_number": 6,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Домен 'Команда'"
   },
   {
     "id": "q_0119",
@@ -4754,7 +4872,8 @@
     "is_verified": true,
     "question_number": "6.3",
     "section_number": 6,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Домен 'Команда'"
   },
   {
     "id": "q_0120",
@@ -4803,7 +4922,8 @@
     "is_verified": true,
     "question_number": "6.4",
     "section_number": 6,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Домен 'Команда'"
   },
   {
     "id": "q_0121",
@@ -4852,7 +4972,8 @@
     "is_verified": true,
     "question_number": "6.5",
     "section_number": 6,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Домен 'Команда'"
   },
   {
     "id": "q_0122",
@@ -4889,7 +5010,8 @@
     "is_verified": true,
     "question_number": "6.6",
     "section_number": 6,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Домен 'Команда'"
   },
   {
     "id": "q_0123",
@@ -4926,7 +5048,8 @@
     "is_verified": true,
     "question_number": "6.7",
     "section_number": 6,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Домен 'Команда'"
   },
   {
     "id": "q_0124",
@@ -4963,7 +5086,8 @@
     "is_verified": true,
     "question_number": "6.8",
     "section_number": 6,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Домен 'Команда'"
   },
   {
     "id": "q_0125",
@@ -5012,7 +5136,8 @@
     "is_verified": true,
     "question_number": "6.9",
     "section_number": 6,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Домен 'Команда'"
   },
   {
     "id": "q_0126",
@@ -5049,7 +5174,8 @@
     "is_verified": true,
     "question_number": "6.10",
     "section_number": 6,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Домен 'Команда'"
   },
   {
     "id": "q_0127",
@@ -5098,7 +5224,8 @@
     "is_verified": true,
     "question_number": "6.11",
     "section_number": 6,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Домен 'Команда'"
   },
   {
     "id": "q_0128",
@@ -5135,7 +5262,8 @@
     "is_verified": true,
     "question_number": "7.1",
     "section_number": 7,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0129",
@@ -5184,7 +5312,8 @@
     "is_verified": true,
     "question_number": "7.2",
     "section_number": 7,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0130",
@@ -5221,7 +5350,8 @@
     "is_verified": true,
     "question_number": "7.3",
     "section_number": 7,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0131",
@@ -5258,7 +5388,8 @@
     "is_verified": true,
     "question_number": "7.4",
     "section_number": 7,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0132",
@@ -5307,7 +5438,8 @@
     "is_verified": true,
     "question_number": "7.5",
     "section_number": 7,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0133",
@@ -5356,7 +5488,8 @@
     "is_verified": true,
     "question_number": "7.6",
     "section_number": 7,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0134",
@@ -5393,7 +5526,8 @@
     "is_verified": true,
     "question_number": "7.7",
     "section_number": 7,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0135",
@@ -5430,7 +5564,8 @@
     "is_verified": true,
     "question_number": "7.8",
     "section_number": 7,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0136",
@@ -5479,7 +5614,8 @@
     "is_verified": true,
     "question_number": "7.9",
     "section_number": 7,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0137",
@@ -5516,7 +5652,8 @@
     "is_verified": true,
     "question_number": "7.10",
     "section_number": 7,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0138",
@@ -5553,7 +5690,8 @@
     "is_verified": true,
     "question_number": "7.11",
     "section_number": 7,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0139",
@@ -5590,7 +5728,8 @@
     "is_verified": true,
     "question_number": "7.12",
     "section_number": 7,
-    "question_number_in_section": 12
+    "question_number_in_section": 12,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0140",
@@ -5627,7 +5766,8 @@
     "is_verified": true,
     "question_number": "7.13",
     "section_number": 7,
-    "question_number_in_section": 13
+    "question_number_in_section": 13,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0141",
@@ -5664,7 +5804,8 @@
     "is_verified": true,
     "question_number": "7.14",
     "section_number": 7,
-    "question_number_in_section": 14
+    "question_number_in_section": 14,
+    "section_name": "Домен 'Жизненный цикл'"
   },
   {
     "id": "q_0142",
@@ -5701,7 +5842,8 @@
     "is_verified": true,
     "question_number": "8.1",
     "section_number": 8,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0143",
@@ -5750,7 +5892,8 @@
     "is_verified": true,
     "question_number": "8.2",
     "section_number": 8,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0144",
@@ -5787,7 +5930,8 @@
     "is_verified": true,
     "question_number": "8.3",
     "section_number": 8,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0145",
@@ -5824,7 +5968,8 @@
     "is_verified": true,
     "question_number": "8.4",
     "section_number": 8,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0146",
@@ -5873,7 +6018,8 @@
     "is_verified": true,
     "question_number": "8.5",
     "section_number": 8,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0147",
@@ -5922,7 +6068,8 @@
     "is_verified": true,
     "question_number": "8.6",
     "section_number": 8,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0148",
@@ -5959,7 +6106,8 @@
     "is_verified": true,
     "question_number": "8.7",
     "section_number": 8,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0149",
@@ -5996,7 +6144,8 @@
     "is_verified": true,
     "question_number": "8.8",
     "section_number": 8,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0150",
@@ -6033,7 +6182,8 @@
     "is_verified": true,
     "question_number": "8.9",
     "section_number": 8,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0151",
@@ -6070,7 +6220,8 @@
     "is_verified": true,
     "question_number": "8.10",
     "section_number": 8,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0152",
@@ -6119,7 +6270,8 @@
     "is_verified": true,
     "question_number": "8.11",
     "section_number": 8,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0153",
@@ -6156,7 +6308,8 @@
     "is_verified": true,
     "question_number": "8.12",
     "section_number": 8,
-    "question_number_in_section": 12
+    "question_number_in_section": 12,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0154",
@@ -6193,7 +6346,8 @@
     "is_verified": true,
     "question_number": "8.13",
     "section_number": 8,
-    "question_number_in_section": 13
+    "question_number_in_section": 13,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0155",
@@ -6242,7 +6396,8 @@
     "is_verified": true,
     "question_number": "8.14",
     "section_number": 8,
-    "question_number_in_section": 14
+    "question_number_in_section": 14,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0156",
@@ -6279,7 +6434,8 @@
     "is_verified": true,
     "question_number": "8.15",
     "section_number": 8,
-    "question_number_in_section": 15
+    "question_number_in_section": 15,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0157",
@@ -6328,7 +6484,8 @@
     "is_verified": true,
     "question_number": "8.16",
     "section_number": 8,
-    "question_number_in_section": 16
+    "question_number_in_section": 16,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0158",
@@ -6365,7 +6522,8 @@
     "is_verified": true,
     "question_number": "8.17",
     "section_number": 8,
-    "question_number_in_section": 17
+    "question_number_in_section": 17,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0159",
@@ -6402,7 +6560,8 @@
     "is_verified": true,
     "question_number": "8.18",
     "section_number": 8,
-    "question_number_in_section": 18
+    "question_number_in_section": 18,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0160",
@@ -6439,7 +6598,8 @@
     "is_verified": true,
     "question_number": "8.19",
     "section_number": 8,
-    "question_number_in_section": 19
+    "question_number_in_section": 19,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0161",
@@ -6476,7 +6636,8 @@
     "is_verified": true,
     "question_number": "8.20",
     "section_number": 8,
-    "question_number_in_section": 20
+    "question_number_in_section": 20,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0162",
@@ -6513,7 +6674,8 @@
     "is_verified": true,
     "question_number": "8.21",
     "section_number": 8,
-    "question_number_in_section": 21
+    "question_number_in_section": 21,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0163",
@@ -6550,7 +6712,8 @@
     "is_verified": true,
     "question_number": "8.22",
     "section_number": 8,
-    "question_number_in_section": 22
+    "question_number_in_section": 22,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0164",
@@ -6587,7 +6750,8 @@
     "is_verified": true,
     "question_number": "8.23",
     "section_number": 8,
-    "question_number_in_section": 23
+    "question_number_in_section": 23,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0165",
@@ -6636,7 +6800,8 @@
     "is_verified": true,
     "question_number": "8.24",
     "section_number": 8,
-    "question_number_in_section": 24
+    "question_number_in_section": 24,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0166",
@@ -6673,7 +6838,8 @@
     "is_verified": true,
     "question_number": "8.25",
     "section_number": 8,
-    "question_number_in_section": 25
+    "question_number_in_section": 25,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0167",
@@ -6722,7 +6888,8 @@
     "is_verified": true,
     "question_number": "8.26",
     "section_number": 8,
-    "question_number_in_section": 26
+    "question_number_in_section": 26,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0168",
@@ -6759,7 +6926,8 @@
     "is_verified": true,
     "question_number": "8.27",
     "section_number": 8,
-    "question_number_in_section": 27
+    "question_number_in_section": 27,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0169",
@@ -6796,7 +6964,8 @@
     "is_verified": true,
     "question_number": "8.28",
     "section_number": 8,
-    "question_number_in_section": 28
+    "question_number_in_section": 28,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0170",
@@ -6833,7 +7002,8 @@
     "is_verified": true,
     "question_number": "8.29",
     "section_number": 8,
-    "question_number_in_section": 29
+    "question_number_in_section": 29,
+    "section_name": "Домен 'Планирование'"
   },
   {
     "id": "q_0171",
@@ -6870,7 +7040,8 @@
     "is_verified": true,
     "question_number": "9.1",
     "section_number": 9,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0172",
@@ -6919,7 +7090,8 @@
     "is_verified": true,
     "question_number": "9.2",
     "section_number": 9,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0173",
@@ -6968,7 +7140,8 @@
     "is_verified": true,
     "question_number": "9.3",
     "section_number": 9,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0174",
@@ -7017,7 +7190,8 @@
     "is_verified": true,
     "question_number": "9.4",
     "section_number": 9,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0175",
@@ -7066,7 +7240,8 @@
     "is_verified": true,
     "question_number": "9.5",
     "section_number": 9,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0176",
@@ -7115,7 +7290,8 @@
     "is_verified": true,
     "question_number": "9.6",
     "section_number": 9,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0177",
@@ -7164,7 +7340,8 @@
     "is_verified": true,
     "question_number": "9.7",
     "section_number": 9,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0178",
@@ -7213,7 +7390,8 @@
     "is_verified": true,
     "question_number": "9.8",
     "section_number": 9,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0179",
@@ -7262,7 +7440,8 @@
     "is_verified": true,
     "question_number": "9.9",
     "section_number": 9,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0180",
@@ -7299,7 +7478,8 @@
     "is_verified": true,
     "question_number": "9.10",
     "section_number": 9,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0181",
@@ -7336,7 +7516,8 @@
     "is_verified": true,
     "question_number": "9.11",
     "section_number": 9,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0182",
@@ -7373,7 +7554,8 @@
     "is_verified": true,
     "question_number": "9.12",
     "section_number": 9,
-    "question_number_in_section": 12
+    "question_number_in_section": 12,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0183",
@@ -7410,7 +7592,8 @@
     "is_verified": true,
     "question_number": "9.13",
     "section_number": 9,
-    "question_number_in_section": 13
+    "question_number_in_section": 13,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0184",
@@ -7447,7 +7630,8 @@
     "is_verified": true,
     "question_number": "9.14",
     "section_number": 9,
-    "question_number_in_section": 14
+    "question_number_in_section": 14,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0185",
@@ -7484,7 +7668,8 @@
     "is_verified": true,
     "question_number": "9.15",
     "section_number": 9,
-    "question_number_in_section": 15
+    "question_number_in_section": 15,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0186",
@@ -7533,7 +7718,8 @@
     "is_verified": true,
     "question_number": "9.16",
     "section_number": 9,
-    "question_number_in_section": 16
+    "question_number_in_section": 16,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0187",
@@ -7582,7 +7768,8 @@
     "is_verified": true,
     "question_number": "9.17",
     "section_number": 9,
-    "question_number_in_section": 17
+    "question_number_in_section": 17,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0188",
@@ -7631,7 +7818,8 @@
     "is_verified": true,
     "question_number": "9.18",
     "section_number": 9,
-    "question_number_in_section": 18
+    "question_number_in_section": 18,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0189",
@@ -7680,7 +7868,8 @@
     "is_verified": true,
     "question_number": "9.19",
     "section_number": 9,
-    "question_number_in_section": 19
+    "question_number_in_section": 19,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0190",
@@ -7729,7 +7918,8 @@
     "is_verified": true,
     "question_number": "9.20",
     "section_number": 9,
-    "question_number_in_section": 20
+    "question_number_in_section": 20,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0191",
@@ -7766,7 +7956,8 @@
     "is_verified": true,
     "question_number": "9.21",
     "section_number": 9,
-    "question_number_in_section": 21
+    "question_number_in_section": 21,
+    "section_name": "Домен 'Работа проекта'"
   },
   {
     "id": "q_0192",
@@ -7803,7 +7994,8 @@
     "is_verified": true,
     "question_number": "10.1",
     "section_number": 10,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0193",
@@ -7852,7 +8044,8 @@
     "is_verified": true,
     "question_number": "10.2",
     "section_number": 10,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0194",
@@ -7889,7 +8082,8 @@
     "is_verified": true,
     "question_number": "10.3",
     "section_number": 10,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0195",
@@ -7926,7 +8120,8 @@
     "is_verified": true,
     "question_number": "10.4",
     "section_number": 10,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0196",
@@ -7975,7 +8170,8 @@
     "is_verified": true,
     "question_number": "10.5",
     "section_number": 10,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0197",
@@ -8024,7 +8220,8 @@
     "is_verified": true,
     "question_number": "10.6",
     "section_number": 10,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0198",
@@ -8061,7 +8258,8 @@
     "is_verified": true,
     "question_number": "10.7",
     "section_number": 10,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0199",
@@ -8110,7 +8308,8 @@
     "is_verified": true,
     "question_number": "10.8",
     "section_number": 10,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0200",
@@ -8147,7 +8346,8 @@
     "is_verified": true,
     "question_number": "10.9",
     "section_number": 10,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0201",
@@ -8184,7 +8384,8 @@
     "is_verified": true,
     "question_number": "10.10",
     "section_number": 10,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0202",
@@ -8233,7 +8434,8 @@
     "is_verified": true,
     "question_number": "10.11",
     "section_number": 10,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0203",
@@ -8270,7 +8472,8 @@
     "is_verified": true,
     "question_number": "10.12",
     "section_number": 10,
-    "question_number_in_section": 12
+    "question_number_in_section": 12,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0204",
@@ -8307,7 +8510,8 @@
     "is_verified": true,
     "question_number": "10.13",
     "section_number": 10,
-    "question_number_in_section": 13
+    "question_number_in_section": 13,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0205",
@@ -8356,7 +8560,8 @@
     "is_verified": true,
     "question_number": "10.14",
     "section_number": 10,
-    "question_number_in_section": 14
+    "question_number_in_section": 14,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0206",
@@ -8393,7 +8598,8 @@
     "is_verified": true,
     "question_number": "10.15",
     "section_number": 10,
-    "question_number_in_section": 15
+    "question_number_in_section": 15,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0207",
@@ -8442,7 +8648,8 @@
     "is_verified": true,
     "question_number": "10.16",
     "section_number": 10,
-    "question_number_in_section": 16
+    "question_number_in_section": 16,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0208",
@@ -8479,7 +8686,8 @@
     "is_verified": true,
     "question_number": "10.17",
     "section_number": 10,
-    "question_number_in_section": 17
+    "question_number_in_section": 17,
+    "section_name": "Домен 'Поставка'"
   },
   {
     "id": "q_0209",
@@ -8516,7 +8724,8 @@
     "is_verified": true,
     "question_number": "11.1",
     "section_number": 11,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0210",
@@ -8565,7 +8774,8 @@
     "is_verified": true,
     "question_number": "11.2",
     "section_number": 11,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0211",
@@ -8602,7 +8812,8 @@
     "is_verified": true,
     "question_number": "11.3",
     "section_number": 11,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0212",
@@ -8651,7 +8862,8 @@
     "is_verified": true,
     "question_number": "11.4",
     "section_number": 11,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0213",
@@ -8688,7 +8900,8 @@
     "is_verified": true,
     "question_number": "11.5",
     "section_number": 11,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0214",
@@ -8737,7 +8950,8 @@
     "is_verified": true,
     "question_number": "11.6",
     "section_number": 11,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0215",
@@ -8774,7 +8988,8 @@
     "is_verified": true,
     "question_number": "11.7",
     "section_number": 11,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0216",
@@ -8823,7 +9038,8 @@
     "is_verified": true,
     "question_number": "11.8",
     "section_number": 11,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0217",
@@ -8860,7 +9076,8 @@
     "is_verified": true,
     "question_number": "11.9",
     "section_number": 11,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0218",
@@ -8909,7 +9126,8 @@
     "is_verified": true,
     "question_number": "11.10",
     "section_number": 11,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0219",
@@ -8958,7 +9176,8 @@
     "is_verified": true,
     "question_number": "11.11",
     "section_number": 11,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0220",
@@ -8995,7 +9214,8 @@
     "is_verified": true,
     "question_number": "11.12",
     "section_number": 11,
-    "question_number_in_section": 12
+    "question_number_in_section": 12,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0221",
@@ -9044,7 +9264,8 @@
     "is_verified": true,
     "question_number": "11.13",
     "section_number": 11,
-    "question_number_in_section": 13
+    "question_number_in_section": 13,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0222",
@@ -9093,7 +9314,8 @@
     "is_verified": true,
     "question_number": "11.14",
     "section_number": 11,
-    "question_number_in_section": 14
+    "question_number_in_section": 14,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0223",
@@ -9142,7 +9364,8 @@
     "is_verified": true,
     "question_number": "11.15",
     "section_number": 11,
-    "question_number_in_section": 15
+    "question_number_in_section": 15,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0224",
@@ -9185,7 +9408,8 @@
     "is_verified": true,
     "question_number": "11.16",
     "section_number": 11,
-    "question_number_in_section": 16
+    "question_number_in_section": 16,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0225",
@@ -9222,7 +9446,8 @@
     "is_verified": true,
     "question_number": "11.17",
     "section_number": 11,
-    "question_number_in_section": 17
+    "question_number_in_section": 17,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0226",
@@ -9271,7 +9496,8 @@
     "is_verified": true,
     "question_number": "11.18",
     "section_number": 11,
-    "question_number_in_section": 18
+    "question_number_in_section": 18,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0227",
@@ -9308,7 +9534,8 @@
     "is_verified": true,
     "question_number": "11.19",
     "section_number": 11,
-    "question_number_in_section": 19
+    "question_number_in_section": 19,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0228",
@@ -9357,7 +9584,8 @@
     "is_verified": true,
     "question_number": "11.20",
     "section_number": 11,
-    "question_number_in_section": 20
+    "question_number_in_section": 20,
+    "section_name": "Домен 'Измерение'"
   },
   {
     "id": "q_0229",
@@ -9394,7 +9622,8 @@
     "is_verified": true,
     "question_number": "12.1",
     "section_number": 12,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0230",
@@ -9443,7 +9672,8 @@
     "is_verified": true,
     "question_number": "12.2",
     "section_number": 12,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0231",
@@ -9480,7 +9710,8 @@
     "is_verified": true,
     "question_number": "12.3",
     "section_number": 12,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0232",
@@ -9529,7 +9760,8 @@
     "is_verified": true,
     "question_number": "12.4",
     "section_number": 12,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0233",
@@ -9566,7 +9798,8 @@
     "is_verified": true,
     "question_number": "12.5",
     "section_number": 12,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0234",
@@ -9615,7 +9848,8 @@
     "is_verified": true,
     "question_number": "12.6",
     "section_number": 12,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0235",
@@ -9664,7 +9898,8 @@
     "is_verified": true,
     "question_number": "12.7",
     "section_number": 12,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0236",
@@ -9713,7 +9948,8 @@
     "is_verified": true,
     "question_number": "12.8",
     "section_number": 12,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0237",
@@ -9750,7 +9986,8 @@
     "is_verified": true,
     "question_number": "12.9",
     "section_number": 12,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0238",
@@ -9799,7 +10036,8 @@
     "is_verified": true,
     "question_number": "12.10",
     "section_number": 12,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0239",
@@ -9836,7 +10074,8 @@
     "is_verified": true,
     "question_number": "12.11",
     "section_number": 12,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0240",
@@ -9885,7 +10124,8 @@
     "is_verified": true,
     "question_number": "12.12",
     "section_number": 12,
-    "question_number_in_section": 12
+    "question_number_in_section": 12,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0241",
@@ -9934,7 +10174,8 @@
     "is_verified": true,
     "question_number": "12.13",
     "section_number": 12,
-    "question_number_in_section": 13
+    "question_number_in_section": 13,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0242",
@@ -9983,7 +10224,8 @@
     "is_verified": true,
     "question_number": "12.14",
     "section_number": 12,
-    "question_number_in_section": 14
+    "question_number_in_section": 14,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0243",
@@ -10020,7 +10262,8 @@
     "is_verified": true,
     "question_number": "12.15",
     "section_number": 12,
-    "question_number_in_section": 15
+    "question_number_in_section": 15,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0244",
@@ -10069,7 +10312,8 @@
     "is_verified": true,
     "question_number": "12.16",
     "section_number": 12,
-    "question_number_in_section": 16
+    "question_number_in_section": 16,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0245",
@@ -10106,7 +10350,8 @@
     "is_verified": true,
     "question_number": "12.17",
     "section_number": 12,
-    "question_number_in_section": 17
+    "question_number_in_section": 17,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0246",
@@ -10143,7 +10388,8 @@
     "is_verified": true,
     "question_number": "12.18",
     "section_number": 12,
-    "question_number_in_section": 18
+    "question_number_in_section": 18,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0247",
@@ -10180,7 +10426,8 @@
     "is_verified": true,
     "question_number": "12.19",
     "section_number": 12,
-    "question_number_in_section": 19
+    "question_number_in_section": 19,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0248",
@@ -10217,7 +10464,8 @@
     "is_verified": true,
     "question_number": "12.20",
     "section_number": 12,
-    "question_number_in_section": 20
+    "question_number_in_section": 20,
+    "section_name": "Домен 'Неопределенность'"
   },
   {
     "id": "q_0249",
@@ -10254,7 +10502,8 @@
     "is_verified": true,
     "question_number": "13.1",
     "section_number": 13,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Адаптация"
   },
   {
     "id": "q_0250",
@@ -10303,7 +10552,8 @@
     "is_verified": true,
     "question_number": "13.2",
     "section_number": 13,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Адаптация"
   },
   {
     "id": "q_0251",
@@ -10340,7 +10590,8 @@
     "is_verified": true,
     "question_number": "13.3",
     "section_number": 13,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Адаптация"
   },
   {
     "id": "q_0252",
@@ -10389,7 +10640,8 @@
     "is_verified": true,
     "question_number": "13.4",
     "section_number": 13,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Адаптация"
   },
   {
     "id": "q_0253",
@@ -10426,7 +10678,8 @@
     "is_verified": true,
     "question_number": "13.5",
     "section_number": 13,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Адаптация"
   },
   {
     "id": "q_0254",
@@ -10463,7 +10716,8 @@
     "is_verified": true,
     "question_number": "13.6",
     "section_number": 13,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Адаптация"
   },
   {
     "id": "q_0255",
@@ -10512,7 +10766,8 @@
     "is_verified": true,
     "question_number": "13.7",
     "section_number": 13,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Адаптация"
   },
   {
     "id": "q_0256",
@@ -10561,7 +10816,8 @@
     "is_verified": true,
     "question_number": "13.8",
     "section_number": 13,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Адаптация"
   },
   {
     "id": "q_0257",
@@ -10598,7 +10854,8 @@
     "is_verified": true,
     "question_number": "14.1",
     "section_number": 14,
-    "question_number_in_section": 1
+    "question_number_in_section": 1,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0258",
@@ -10647,7 +10904,8 @@
     "is_verified": true,
     "question_number": "14.2",
     "section_number": 14,
-    "question_number_in_section": 2
+    "question_number_in_section": 2,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0259",
@@ -10684,7 +10942,8 @@
     "is_verified": true,
     "question_number": "14.3",
     "section_number": 14,
-    "question_number_in_section": 3
+    "question_number_in_section": 3,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0260",
@@ -10721,7 +10980,8 @@
     "is_verified": true,
     "question_number": "14.4",
     "section_number": 14,
-    "question_number_in_section": 4
+    "question_number_in_section": 4,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0261",
@@ -10758,7 +11018,8 @@
     "is_verified": true,
     "question_number": "14.5",
     "section_number": 14,
-    "question_number_in_section": 5
+    "question_number_in_section": 5,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0262",
@@ -10807,7 +11068,8 @@
     "is_verified": true,
     "question_number": "14.6",
     "section_number": 14,
-    "question_number_in_section": 6
+    "question_number_in_section": 6,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0263",
@@ -10850,7 +11112,8 @@
     "is_verified": true,
     "question_number": "14.7",
     "section_number": 14,
-    "question_number_in_section": 7
+    "question_number_in_section": 7,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0264",
@@ -10887,7 +11150,8 @@
     "is_verified": true,
     "question_number": "14.8",
     "section_number": 14,
-    "question_number_in_section": 8
+    "question_number_in_section": 8,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0265",
@@ -10924,7 +11188,8 @@
     "is_verified": true,
     "question_number": "14.9",
     "section_number": 14,
-    "question_number_in_section": 9
+    "question_number_in_section": 9,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0266",
@@ -10961,7 +11226,8 @@
     "is_verified": true,
     "question_number": "14.10",
     "section_number": 14,
-    "question_number_in_section": 10
+    "question_number_in_section": 10,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0267",
@@ -10998,7 +11264,8 @@
     "is_verified": true,
     "question_number": "14.11",
     "section_number": 14,
-    "question_number_in_section": 11
+    "question_number_in_section": 11,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0268",
@@ -11035,7 +11302,8 @@
     "is_verified": true,
     "question_number": "14.12",
     "section_number": 14,
-    "question_number_in_section": 12
+    "question_number_in_section": 12,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0269",
@@ -11072,7 +11340,8 @@
     "is_verified": true,
     "question_number": "14.13",
     "section_number": 14,
-    "question_number_in_section": 13
+    "question_number_in_section": 13,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0270",
@@ -11121,7 +11390,8 @@
     "is_verified": true,
     "question_number": "14.14",
     "section_number": 14,
-    "question_number_in_section": 14
+    "question_number_in_section": 14,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0271",
@@ -11158,7 +11428,8 @@
     "is_verified": true,
     "question_number": "14.15",
     "section_number": 14,
-    "question_number_in_section": 15
+    "question_number_in_section": 15,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0272",
@@ -11195,7 +11466,8 @@
     "is_verified": true,
     "question_number": "14.16",
     "section_number": 14,
-    "question_number_in_section": 16
+    "question_number_in_section": 16,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0273",
@@ -11244,7 +11516,8 @@
     "is_verified": true,
     "question_number": "14.17",
     "section_number": 14,
-    "question_number_in_section": 17
+    "question_number_in_section": 17,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0274",
@@ -11293,7 +11566,8 @@
     "is_verified": true,
     "question_number": "14.18",
     "section_number": 14,
-    "question_number_in_section": 18
+    "question_number_in_section": 18,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0275",
@@ -11342,7 +11616,8 @@
     "is_verified": true,
     "question_number": "14.19",
     "section_number": 14,
-    "question_number_in_section": 19
+    "question_number_in_section": 19,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0276",
@@ -11379,7 +11654,8 @@
     "is_verified": true,
     "question_number": "14.20",
     "section_number": 14,
-    "question_number_in_section": 20
+    "question_number_in_section": 20,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0277",
@@ -11416,7 +11692,8 @@
     "is_verified": true,
     "question_number": "14.21",
     "section_number": 14,
-    "question_number_in_section": 21
+    "question_number_in_section": 21,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0278",
@@ -11453,7 +11730,8 @@
     "is_verified": true,
     "question_number": "14.22",
     "section_number": 14,
-    "question_number_in_section": 22
+    "question_number_in_section": 22,
+    "section_name": "Модели, методы, артефакты"
   },
   {
     "id": "q_0279",
@@ -11490,6 +11768,7 @@
     "is_verified": true,
     "question_number": "14.23",
     "section_number": 14,
-    "question_number_in_section": 23
+    "question_number_in_section": 23,
+    "section_name": "Модели, методы, артефакты"
   }
 ]

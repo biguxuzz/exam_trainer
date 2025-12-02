@@ -16,7 +16,7 @@
 
 1. Нажмите **"Add a new web app"**
 2. Выберите **"Manual configuration"** (не Flask starter)
-3. Выберите версию Python (рекомендуется Python 3.10 или выше)
+3. Выберите версию Python (рекомендуется Python 3.10 или выше, включая 3.13)
 4. Нажмите **"Next"**
 
 ## Шаг 3: Клонирование репозитория
@@ -48,8 +48,8 @@
 1. В консоли Bash выполните:
    ```bash
    cd ~/exam_trainer
-   python3.10 -m venv venv
-   # или python3.11 -m venv venv (в зависимости от версии Python)
+   python3.13 -m venv venv
+   # Замените python3.13 на вашу версию Python (python3.10, python3.11, python3.12 и т.д.)
    ```
 
 2. Активируйте виртуальное окружение:
@@ -89,48 +89,53 @@ mkdir -p secrets
 1. Вернитесь в раздел **"Web"**
 2. Найдите секцию **"WSGI configuration file"**
 3. Нажмите на ссылку для редактирования файла
-4. Замените содержимое на:
+4. **Важно:** Сначала определите версию Python вашего виртуального окружения:
+   ```bash
+   cd ~/exam_trainer
+   source venv/bin/activate
+   python --version
+   ```
+   Запомните версию (например, Python 3.10, 3.11, 3.12, 3.13 и т.д.)
+
+5. Замените содержимое WSGI файла на:
 
 ```python
 # +++++++++++ FLASK +++++++++++
 # Flask works like any other WSGI-compatible framework, we just need
 # to import the application.  Often Flask apps are called "app" so we
 # may need to rename it during import to avoid conflicts.
-#
-# EXAMPLE:
-#
-##   Your flask app is named "app" and is in "myapp"
-##   from myapp import app as application  # noqa
-#
-# If you have "package" structure myapp/app.py you can use:
-#
-##   from myapp.app import app as application
-#
-# And if your Flask instance is named "app" and is in "myapp/__init__.py":
-#
-##   from myapp import app as application
 
 import sys
+import os
 
 # Путь к вашему проекту
-path = '/home/ваш-username/exam_trainer'
-if path not in sys.path:
-    sys.path.insert(0, path)
+project_home = '/home/ваш-username/exam_trainer'
+if project_home not in sys.path:
+    sys.path.insert(0, project_home)
 
-# Активируем виртуальное окружение
-activate_this = '/home/ваш-username/exam_trainer/venv/bin/activate_this.py'
-with open(activate_this) as file_:
-    exec(file_.read(), dict(__file__=activate_this))
+# Путь к site-packages виртуального окружения
+# Замените python3.13 на вашу версию Python (3.10, 3.11, 3.12, 3.13 и т.д.)
+venv_site_packages = '/home/ваш-username/exam_trainer/venv/lib/python3.13/site-packages'
+# Примеры для других версий:
+# venv_site_packages = '/home/ваш-username/exam_trainer/venv/lib/python3.12/site-packages'
+# venv_site_packages = '/home/ваш-username/exam_trainer/venv/lib/python3.11/site-packages'
+# venv_site_packages = '/home/ваш-username/exam_trainer/venv/lib/python3.10/site-packages'
+
+if venv_site_packages not in sys.path:
+    sys.path.insert(0, venv_site_packages)
 
 # Импортируем приложение
 from trainer_app import app as application
 
 # Если вы используете переменные окружения, установите их здесь
-import os
 # os.environ['SECRET_KEY'] = 'ваш-секретный-ключ-для-production'
 ```
 
-**Важно:** Замените `ваш-username` на ваш реальный username на PythonAnywhere.
+**Важно:** 
+- Замените `ваш-username` на ваш реальный username на PythonAnywhere
+- Замените `python3.13` на вашу версию Python (например, `python3.12`, `python3.11`, `python3.10`), если используете другую версию
+- Путь к `site-packages` должен точно соответствовать версии Python вашего виртуального окружения
+- Проверьте версию командой: `source venv/bin/activate && python --version`
 
 ## Шаг 8: Настройка статических файлов
 
@@ -205,9 +210,32 @@ chmod 755 ~/exam_trainer/secrets
 ### Проблема: Ошибка импорта модулей
 
 **Решение:**
-- Убедитесь, что виртуальное окружение активировано в WSGI файле
-- Проверьте, что все зависимости установлены: `pip list`
-- Проверьте пути в WSGI файле
+1. **Способ 1 (рекомендуется):** Используйте настройку Virtualenv в веб-интерфейсе:
+   - Web → Virtualenv → укажите `/home/ваш-username/exam_trainer/venv`
+   - Это автоматически добавит пути к библиотекам
+   - Используйте упрощенный WSGI файл (см. альтернативный способ в Шаге 7)
+
+2. **Способ 2:** Если используете ручную настройку в WSGI файле:
+   - Проверьте версию Python в виртуальном окружении:
+     ```bash
+     cd ~/exam_trainer
+     source venv/bin/activate
+     python --version
+     ```
+   - Убедитесь, что путь к `site-packages` в WSGI файле соответствует версии Python
+   - Проверьте, что путь существует:
+     ```bash
+     ls -la ~/exam_trainer/venv/lib/python3.13/site-packages
+     # Замените python3.13 на вашу версию (python3.12, python3.11, python3.10 и т.д.)
+     ```
+
+3. Проверьте, что все зависимости установлены:
+   ```bash
+   source venv/bin/activate
+   pip list
+   ```
+
+4. Проверьте пути в WSGI файле - все пути должны быть абсолютными
 
 ### Проблема: 500 Internal Server Error
 
