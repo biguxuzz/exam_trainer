@@ -90,20 +90,24 @@ def load_secrets():
 def is_valid_secret(secret: str) -> bool:
     """Проверка валидности Secret"""
     if not secret:
+        logging.debug("Secret validation failed: empty secret")
         return False
     
     # Защита от Path Traversal - secret должен быть простой строкой без спецсимволов
     if not secret.isalnum() or len(secret) < 16 or len(secret) > 64:
+        logging.warning(f"Secret validation failed: invalid format (len={len(secret)}, alnum={secret.isalnum()})")
         return False
     
     # Проверяем, зарегистрирован ли Secret (проверяем СНАЧАЛА в списке, потом папку)
     registered_secrets = load_secrets()
     if secret not in registered_secrets:
+        logging.warning(f"Secret validation failed: not in registered list (registered: {len(registered_secrets)} secrets)")
         return False
     
     # Проверяем, существует ли папка для этого Secret
     secret_dir = os.path.join(SECRETS_DIR, secret)
     if not os.path.exists(secret_dir):
+        logging.warning(f"Secret validation failed: directory not found: {secret_dir}")
         return False
     
     return True
@@ -487,8 +491,16 @@ def get_questions():
     if section_filter:
         try:
             section_num = int(section_filter)
-            questions = [q for q in questions if q.section_number == section_num]
+            # Фильтруем вопросы, учитывая что section_number может быть None
+            filtered_questions = [q for q in questions 
+                                 if q.section_number is not None and q.section_number == section_num]
+            if not filtered_questions and questions:
+                # Логируем для отладки, если раздел не найден
+                section_numbers = sorted(set(q.section_number for q in questions if q.section_number is not None))
+                logging.warning(f"Раздел {section_num} не найден. Доступные разделы: {section_numbers}")
+            questions = filtered_questions
         except ValueError:
+            logging.error(f"Некорректный номер раздела: {section_filter}")
             pass
     
     # Поиск

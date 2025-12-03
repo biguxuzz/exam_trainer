@@ -2064,44 +2064,80 @@
             const notMastered = document.getElementById('filter-not-mastered').checked;
             const notAttempted = document.getElementById('filter-not-attempted').checked;
             
+            // Правильно формируем параметр section
+            const sectionParam = (state.testSection !== null && state.testSection !== undefined) 
+                ? state.testSection.toString() 
+                : '';
+            
             const params = new URLSearchParams({
                 hide_mastered: notMastered,
-                section: state.testSection || '',
+                section: sectionParam,
                 status: notAttempted ? 'not_attempted' : ''
             });
             
-            const response = await apiFetch(`/api/questions?${params}`);
-            const data = await response.json();
-            
-            let count = data.questions.length;
-            if (state.testSection === null) {
-                // Random test - one per section
-                count = Math.min(count, state.sections.length);
+            try {
+                const response = await apiFetch(`/api/questions?${params}`);
+                const data = await response.json();
+                
+                let count = data.questions?.length || 0;
+                if (state.testSection === null || state.testSection === undefined) {
+                    // Random test - one per section
+                    count = Math.min(count, state.sections?.length || 0);
+                }
+                
+                const countElement = document.getElementById('test-start-count');
+                if (countElement) {
+                    countElement.textContent = count;
+                }
+            } catch (error) {
+                console.error('Error updating test start count:', error);
+                const countElement = document.getElementById('test-start-count');
+                if (countElement) {
+                    countElement.textContent = '0';
+                }
             }
-            
-            document.getElementById('test-start-count').textContent = count;
         }
 
         document.getElementById('filter-not-mastered')?.addEventListener('change', updateTestStartCount);
         document.getElementById('filter-not-attempted')?.addEventListener('change', updateTestStartCount);
 
         async function startTest() {
-            const notMastered = document.getElementById('filter-not-mastered').checked;
-            const notAttempted = document.getElementById('filter-not-attempted').checked;
+            const notMasteredElement = document.getElementById('filter-not-mastered');
+            const notAttemptedElement = document.getElementById('filter-not-attempted');
+            const notMastered = notMasteredElement ? notMasteredElement.checked : false;
+            const notAttempted = notAttemptedElement ? notAttemptedElement.checked : false;
+            
+            const sectionParam = (state.testSection !== null && state.testSection !== undefined) 
+                ? state.testSection.toString() 
+                : '';
             
             const params = new URLSearchParams({
                 hide_mastered: notMastered,
-                section: state.testSection || '',
+                section: sectionParam,
                 status: notAttempted ? 'not_attempted' : ''
+            });
+            
+            console.log('Starting test with params:', {
+                testSection: state.testSection,
+                sectionParam: sectionParam,
+                notMastered: notMastered,
+                notAttempted: notAttempted
             });
             
             const response = await apiFetch(`/api/questions?${params}`);
             const data = await response.json();
             
-            let questions = data.questions;
+            console.log('Received questions for test:', {
+                total: data.questions?.length || 0,
+                testSection: state.testSection,
+                sectionParam: sectionParam,
+                questions: data.questions?.slice(0, 3) // Первые 3 вопроса для отладки
+            });
+            
+            let questions = data.questions || [];
             
             // For random test, pick one from each section
-            if (state.testSection === null) {
+            if (state.testSection === null || state.testSection === undefined) {
                 const bySection = {};
                 questions.forEach(q => {
                     const sec = q.section_number || 0;
@@ -2115,7 +2151,20 @@
             }
             
             if (questions.length === 0) {
-                alert('Нет вопросов для теста с выбранными фильтрами');
+                let message = 'Нет вопросов для теста с выбранными фильтрами';
+                if (state.testSection !== null && state.testSection !== undefined) {
+                    const sectionName = state.sections.find(s => s.number === state.testSection)?.name || `раздел ${state.testSection}`;
+                    message += `\n\nРаздел: ${sectionName}\nПроверьте:\n- Есть ли вопросы в этом разделе?\n- Все ли вопросы имеют номер раздела?`;
+                }
+                alert(message);
+                console.error('No questions found for test:', {
+                    testSection: state.testSection,
+                    sectionParam: sectionParam,
+                    filters: { notMastered, notAttempted },
+                    totalQuestions: data.questions?.length || 0,
+                    sections: state.sections,
+                    receivedQuestions: data.questions
+                });
                 return;
             }
             
