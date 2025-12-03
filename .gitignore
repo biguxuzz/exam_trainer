@@ -7,12 +7,13 @@ __pycache__/
 venv/
 env/
 ENV/
-sources/rp_exam_questions.json
-sources/osnovy_exam_questions.json
 
 # Secrets and user data
 secrets/
 secrets_config.json
+
+#exam data
+sources/
 
 # IDE
 .vscode/
