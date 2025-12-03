@@ -1321,6 +1321,18 @@
                                 <input type="checkbox" id="filter-not-attempted">
                                 <span>Только не пройденные</span>
                             </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="filter-test-repeat-mastered">
+                                <span>Повторить усвоенные</span>
+                            </label>
+                        </div>
+                        <div id="test-repeat-days-container" style="display: none; margin-top: 12px; margin-left: 24px;">
+                            <label style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                                <span style="white-space: nowrap;">Не повторял более</span>
+                                <input type="number" id="filter-test-repeat-days" value="1.0" min="0" max="30" step="0.1" 
+                                       style="width: 70px; padding: 6px 8px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary);">
+                                <span>дней</span>
+                            </label>
                         </div>
                     </div>
 
@@ -1511,6 +1523,22 @@
         </div>
 
         <div class="filter-section">
+            <div class="filter-section-title">Повторение усвоенных</div>
+            <label class="filter-option" style="margin-bottom: 8px;">
+                <input type="checkbox" id="filter-repeat-mastered">
+                <span>Показать для повторения</span>
+            </label>
+            <div id="repeat-days-container" style="display: none; margin-left: 24px;">
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <span style="white-space: nowrap;">Не повторял более</span>
+                    <input type="number" id="filter-repeat-days" value="1.0" min="0" max="30" step="0.1" 
+                           style="width: 70px; padding: 6px 8px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-primary);">
+                    <span>дней</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="filter-section">
             <div class="filter-section-title">Поиск</div>
             <input type="text" id="filter-search" placeholder="Поиск по тексту..." style="width: 100%; padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);">
         </div>
@@ -1567,7 +1595,9 @@
                 hideMastered: true,
                 notAttempted: false,
                 withErrors: false,
-                search: ''
+                search: '',
+                repeatMastered: false,
+                repeatDays: '1.0'
             },
             
             // Stats
@@ -1705,6 +1735,35 @@
             document.getElementById('filter-search').addEventListener('input', debounce(() => {
                 state.filters.search = document.getElementById('filter-search').value;
             }, 300));
+            
+            // Обработчик для переключения режима повторения усвоенных в основном режиме
+            document.getElementById('filter-repeat-mastered')?.addEventListener('change', function() {
+                const container = document.getElementById('repeat-days-container');
+                if (container) {
+                    container.style.display = this.checked ? 'block' : 'none';
+                }
+                // Если включаем "повторить усвоенные", отключаем "скрывать усвоенные"
+                if (this.checked) {
+                    const hideCheckbox = document.getElementById('filter-hide-mastered');
+                    if (hideCheckbox) {
+                        hideCheckbox.checked = false;
+                    }
+                }
+            });
+            
+            // При изменении "скрывать усвоенные", отключаем "повторить усвоенные"
+            document.getElementById('filter-hide-mastered')?.addEventListener('change', function() {
+                if (this.checked) {
+                    const repeatCheckbox = document.getElementById('filter-repeat-mastered');
+                    if (repeatCheckbox) {
+                        repeatCheckbox.checked = false;
+                        const container = document.getElementById('repeat-days-container');
+                        if (container) {
+                            container.style.display = 'none';
+                        }
+                    }
+                }
+            });
         });
 
         function debounce(func, wait) {
@@ -1779,10 +1838,11 @@
 
         async function loadQuestions() {
             const params = new URLSearchParams({
-                hide_mastered: state.filters.hideMastered,
+                hide_mastered: state.filters.repeatMastered ? 'false' : state.filters.hideMastered,
                 section: state.filters.section,
                 status: state.filters.notAttempted ? 'not_attempted' : (state.filters.withErrors ? 'with_errors' : ''),
-                search: state.filters.search
+                search: state.filters.search,
+                not_repeated_days: state.filters.repeatMastered ? state.filters.repeatDays : ''
             });
             
             const response = await apiFetch(`/api/questions?${params}`);
@@ -2094,6 +2154,8 @@
             state.filters.notAttempted = document.getElementById('filter-not-attempted-main').checked;
             state.filters.withErrors = document.getElementById('filter-with-errors').checked;
             state.filters.section = document.getElementById('filter-section').value;
+            state.filters.repeatMastered = document.getElementById('filter-repeat-mastered').checked;
+            state.filters.repeatDays = document.getElementById('filter-repeat-days').value;
             state.filters.search = document.getElementById('filter-search').value;
             
             await loadQuestions();
@@ -2117,18 +2179,24 @@
         }
 
         async function updateTestStartCount() {
-            const notMastered = document.getElementById('filter-not-mastered').checked;
-            const notAttempted = document.getElementById('filter-not-attempted').checked;
+            const notMastered = document.getElementById('filter-not-mastered')?.checked || false;
+            const notAttempted = document.getElementById('filter-not-attempted')?.checked || false;
+            const repeatMastered = document.getElementById('filter-test-repeat-mastered')?.checked || false;
+            const repeatDays = document.getElementById('filter-test-repeat-days')?.value || '1.0';
             
             // Правильно формируем параметр section
             const sectionParam = (state.testSection !== null && state.testSection !== undefined) 
                 ? state.testSection.toString() 
                 : '';
             
+            // Если включен режим повторения усвоенных, отключаем hide_mastered
+            const hideMastered = repeatMastered ? false : notMastered;
+            
             const params = new URLSearchParams({
-                hide_mastered: notMastered,
+                hide_mastered: hideMastered,
                 section: sectionParam,
-                status: notAttempted ? 'not_attempted' : ''
+                status: notAttempted ? 'not_attempted' : '',
+                not_repeated_days: repeatMastered ? repeatDays : ''
             });
             
             try {
@@ -2154,30 +2222,65 @@
             }
         }
 
-        document.getElementById('filter-not-mastered')?.addEventListener('change', updateTestStartCount);
+        document.getElementById('filter-not-mastered')?.addEventListener('change', function() {
+            // Если включаем "только не усвоенные", отключаем "повторить усвоенные"
+            if (this.checked) {
+                const repeatCheckbox = document.getElementById('filter-test-repeat-mastered');
+                if (repeatCheckbox) {
+                    repeatCheckbox.checked = false;
+                    document.getElementById('test-repeat-days-container').style.display = 'none';
+                }
+            }
+            updateTestStartCount();
+        });
         document.getElementById('filter-not-attempted')?.addEventListener('change', updateTestStartCount);
+        document.getElementById('filter-test-repeat-mastered')?.addEventListener('change', function() {
+            // Показываем/скрываем поле с количеством дней
+            document.getElementById('test-repeat-days-container').style.display = this.checked ? 'block' : 'none';
+            // Если включаем "повторить усвоенные", отключаем "только не усвоенные"
+            if (this.checked) {
+                const notMasteredCheckbox = document.getElementById('filter-not-mastered');
+                if (notMasteredCheckbox) {
+                    notMasteredCheckbox.checked = false;
+                }
+            }
+            updateTestStartCount();
+        });
+        document.getElementById('filter-test-repeat-days')?.addEventListener('change', updateTestStartCount);
+        document.getElementById('filter-test-repeat-days')?.addEventListener('input', updateTestStartCount);
 
         async function startTest() {
             const notMasteredElement = document.getElementById('filter-not-mastered');
             const notAttemptedElement = document.getElementById('filter-not-attempted');
+            const repeatMasteredElement = document.getElementById('filter-test-repeat-mastered');
+            const repeatDaysElement = document.getElementById('filter-test-repeat-days');
+            
             const notMastered = notMasteredElement ? notMasteredElement.checked : false;
             const notAttempted = notAttemptedElement ? notAttemptedElement.checked : false;
+            const repeatMastered = repeatMasteredElement ? repeatMasteredElement.checked : false;
+            const repeatDays = repeatDaysElement ? repeatDaysElement.value : '1.0';
             
             const sectionParam = (state.testSection !== null && state.testSection !== undefined) 
                 ? state.testSection.toString() 
                 : '';
             
+            // Если включен режим повторения усвоенных, отключаем hide_mastered
+            const hideMastered = repeatMastered ? false : notMastered;
+            
             const params = new URLSearchParams({
-                hide_mastered: notMastered,
+                hide_mastered: hideMastered,
                 section: sectionParam,
-                status: notAttempted ? 'not_attempted' : ''
+                status: notAttempted ? 'not_attempted' : '',
+                not_repeated_days: repeatMastered ? repeatDays : ''
             });
             
             console.log('Starting test with params:', {
                 testSection: state.testSection,
                 sectionParam: sectionParam,
                 notMastered: notMastered,
-                notAttempted: notAttempted
+                notAttempted: notAttempted,
+                repeatMastered: repeatMastered,
+                repeatDays: repeatDays
             });
             
             const response = await apiFetch(`/api/questions?${params}`);

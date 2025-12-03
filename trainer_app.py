@@ -482,6 +482,7 @@ def get_questions():
     section_filter = request.args.get('section', '').strip()
     status_filter = request.args.get('status', '').strip()
     search_query = request.args.get('search', '').strip()
+    not_repeated_days = request.args.get('not_repeated_days', '').strip()
     
     # Фильтруем только вопросы с подтверждёнными ответами
     questions = [q for q in question_bank.questions 
@@ -535,6 +536,30 @@ def get_questions():
         # Скрываем усвоенные если нужно (применяется после фильтра по статусу)
         if hide_mastered and progress.get("mastered", False) and status_filter != 'mastered':
             continue
+        
+        # Фильтр "усвоенные, не повторявшиеся более X дней"
+        if not_repeated_days:
+            try:
+                days_threshold = float(not_repeated_days)
+                if days_threshold >= 0:
+                    # Только для усвоенных вопросов
+                    if progress.get("mastered", False):
+                        last_attempt = progress.get("last_attempt")
+                        if last_attempt:
+                            try:
+                                last_attempt_date = datetime.fromisoformat(last_attempt)
+                                days_since = (datetime.now() - last_attempt_date).total_seconds() / 86400
+                                # Если повторяли недавно - пропускаем
+                                if days_since < days_threshold:
+                                    continue
+                            except (ValueError, TypeError):
+                                pass
+                        # Если last_attempt отсутствует - включаем (давно не повторяли)
+                    else:
+                        # Не усвоенные вопросы - не включаем в этот фильтр
+                        continue
+            except ValueError:
+                pass
         
         q_dict = q.to_dict()
         q_dict["progress"] = progress
