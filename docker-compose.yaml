@@ -1,0 +1,25 @@
+services:
+  app:
+    build: .
+    image: exam_trainer:latest
+    environment:
+      # Рекомендуется задать в .env или окружении хоста
+      - SECRET_KEY=${SECRET_KEY:-}
+      - FLASK_ENV=${FLASK_ENV:-development}
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "5002:5002"
+    volumes:
+      # Данные пользователей должны жить отдельно как том
+      - ./secrets:/app/secrets
+    restart: unless-stopped
+
+  generate-secret:
+    build: .
+    image: exam_trainer:latest
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./secrets:/app/secrets
+    command: ["python", "/app/generate_secret.py"]
+    profiles: ["tools"]
