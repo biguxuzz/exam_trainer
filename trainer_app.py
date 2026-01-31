@@ -479,10 +479,11 @@ def auth_status():
 def telegram_login():
     """Авторизация через Telegram Mini App initData"""
     if not TELEGRAM_BOT_TOKEN:
-        logging.error("TELEGRAM_BOT_TOKEN не установлен")
+        logging.error("TELEGRAM_BOT_TOKEN не установлен - проверьте переменную окружения")
         return jsonify({
-            "error": "Telegram авторизация не настроена на сервере",
-            "authenticated": False
+            "error": "Telegram авторизация не настроена на сервере. Установите TELEGRAM_BOT_TOKEN.",
+            "authenticated": False,
+            "debug": "TELEGRAM_BOT_TOKEN не установлен"
         }), 500
     
     data = request.get_json()
@@ -495,25 +496,43 @@ def telegram_login():
         }), 400
     
     # Валидируем initData
-    is_valid, telegram_data = telegram_auth.verify_telegram_init_data(
-        init_data,
-        TELEGRAM_BOT_TOKEN,
-        TELEGRAM_AUTH_MAX_AGE_SECONDS
-    )
-    
-    if not is_valid or not telegram_data:
-        logging.warning("Telegram initData validation failed")
+    try:
+        is_valid, telegram_data = telegram_auth.verify_telegram_init_data(
+            init_data,
+            TELEGRAM_BOT_TOKEN,
+            TELEGRAM_AUTH_MAX_AGE_SECONDS
+        )
+        
+        if not is_valid or not telegram_data:
+            logging.warning(f"Telegram initData validation failed. init_data length: {len(init_data)}, has_token: {bool(TELEGRAM_BOT_TOKEN)}")
+            # Логируем первые 100 символов init_data для отладки (безопасно, так как это не секрет)
+            if init_data:
+                logging.debug(f"init_data preview: {init_data[:100]}...")
+            return jsonify({
+                "error": "Неверные данные авторизации Telegram. Проверьте, что TELEGRAM_BOT_TOKEN установлен правильно.",
+                "authenticated": False
+            }), 401
+    except Exception as e:
+        logging.error(f"Exception during Telegram initData validation: {e}", exc_info=True)
         return jsonify({
-            "error": "Неверные данные авторизации Telegram",
+            "error": f"Ошибка валидации данных Telegram: {str(e)}",
             "authenticated": False
-        }), 401
+        }), 500
     
     # Извлекаем user_id из данных
     user_data = telegram_data.get('user')
-    if not user_data or 'id' not in user_data:
-        logging.warning("Telegram user data missing or invalid")
+    if not user_data:
+        logging.warning("Telegram user data missing - возможно Mini App открыт не через Main Mini App")
+        logging.debug(f"telegram_data keys: {list(telegram_data.keys())}")
         return jsonify({
-            "error": "Данные пользователя Telegram не найдены",
+            "error": "Данные пользователя Telegram не найдены. Убедитесь, что Mini App открыт через Telegram.",
+            "authenticated": False
+        }), 401
+    
+    if 'id' not in user_data:
+        logging.warning(f"Telegram user data invalid - missing 'id' field. User data: {user_data}")
+        return jsonify({
+            "error": "Неверный формат данных пользователя Telegram",
             "authenticated": False
         }), 401
     

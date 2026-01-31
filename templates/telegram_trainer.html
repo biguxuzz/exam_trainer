@@ -793,17 +793,24 @@
         async function authenticateTelegram() {
             // Проверяем, что мы запущены в Telegram
             if (!window.Telegram || !window.Telegram.WebApp) {
-                // Если открыто не через Telegram - показываем сообщение, но не блокируем критично
-                console.warn('Telegram WebApp API не доступен - возможно открыто не через Telegram');
+                console.error('Telegram WebApp API не доступен');
+                console.log('window.Telegram:', window.Telegram);
                 return false;
             }
             
             const initData = tg.initData;
             if (!initData) {
-                // initData может отсутствовать в некоторых случаях (например, при прямом открытии)
-                console.warn('Telegram initData не найден');
+                console.error('Telegram initData не найден');
+                console.log('tg object:', {
+                    initData: tg.initData,
+                    initDataUnsafe: tg.initDataUnsafe,
+                    version: tg.version,
+                    platform: tg.platform
+                });
                 return false;
             }
+            
+            console.log('Attempting Telegram auth, initData length:', initData.length);
             
             try {
                 const response = await fetch(`${API_BASE}/auth/telegram`, {
@@ -815,15 +822,25 @@
                 
                 const data = await response.json();
                 
+                console.log('Auth response:', {
+                    status: response.status,
+                    ok: response.ok,
+                    authenticated: data.authenticated,
+                    error: data.error
+                });
+                
                 if (response.ok && data.authenticated) {
+                    console.log('Telegram auth successful');
                     return true;
                 } else {
-                    tg.showAlert(data.error || 'Ошибка авторизации через Telegram');
+                    const errorMsg = data.error || 'Ошибка авторизации через Telegram';
+                    console.error('Telegram auth failed:', errorMsg);
+                    tg.showAlert(errorMsg);
                     return false;
                 }
             } catch (error) {
                 console.error('Telegram auth error:', error);
-                tg.showAlert('Ошибка подключения к серверу');
+                tg.showAlert('Ошибка подключения к серверу: ' + error.message);
                 return false;
             }
         }

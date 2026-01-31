@@ -51,8 +51,12 @@ def verify_telegram_init_data(
     Returns:
         Tuple[bool, Optional[Dict]]: (успех валидации, распарсенные данные или None)
     """
-    if not init_data or not bot_token:
-        logger.warning("Missing init_data or bot_token")
+    if not init_data:
+        logger.warning("Missing init_data")
+        return False, None
+    
+    if not bot_token:
+        logger.error("Missing bot_token - TELEGRAM_BOT_TOKEN не установлен!")
         return False, None
     
     try:
@@ -106,7 +110,8 @@ def verify_telegram_init_data(
         
         # Сравниваем хеши (защита от timing attacks)
         if not hmac.compare_digest(calculated_hash, received_hash):
-            logger.warning("Hash mismatch in init_data")
+            logger.warning(f"Hash mismatch in init_data. Calculated: {calculated_hash[:16]}..., Received: {received_hash[:16]}...")
+            logger.debug(f"Data check string: {data_check_string[:200]}...")
             return False, None
         
         # Парсим user если есть
