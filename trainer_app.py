@@ -10,6 +10,7 @@ import json
 import logging
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
+import telegram_auth
 
 app = Flask(__name__)
 
@@ -55,6 +56,10 @@ BLOCK_DURATION_MINUTES = 15
 
 # Экзамен по умолчанию
 DEFAULT_EXAM_NAME = "1С:Руководитель проекта"
+
+# Конфигурация Telegram Mini App
+TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN', '')
+TELEGRAM_AUTH_MAX_AGE_SECONDS = int(os.environ.get('TELEGRAM_AUTH_MAX_AGE_SECONDS', '86400'))
 
 
 def get_question_bank(exam_name: str) -> QuestionBank:
@@ -122,16 +127,44 @@ def get_user_progress(secret: str) -> 'UserProgress':
     return user_progress_cache[secret]
 
 
+def get_telegram_user_progress(telegram_user_id: int) -> 'UserProgress':
+    """Получение или создание экземпляра UserProgress для Telegram user_id"""
+    # Используем префикс tg_ для Telegram пользователей
+    user_key = f"tg_{telegram_user_id}"
+    if user_key not in user_progress_cache:
+        # Создаём директорию для Telegram пользователя
+        telegram_user_dir = os.path.join(SECRETS_DIR, user_key)
+        os.makedirs(telegram_user_dir, exist_ok=True)
+        progress_file = os.path.join(telegram_user_dir, "trainer_progress.json")
+        user_progress_cache[user_key] = UserProgress(progress_file)
+    return user_progress_cache[user_key]
+
+
 def require_auth(f):
-    """Декоратор для защиты маршрутов от неавторизованного доступа"""
+    """Декоратор для защиты маршрутов от неавторизованного доступа.
+    
+    Поддерживает два типа авторизации:
+    1. Secret-based (для веб-версии)
+    2. Telegram user_id (для Telegram Mini App)
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
         # Убеждаемся, что сессия постоянная
         session.permanent = True
+        
+        # Проверяем Telegram авторизацию
+        telegram_user_id = session.get('telegram_user_id')
+        if telegram_user_id:
+            # Telegram пользователь авторизован
+            return f(*args, **kwargs)
+        
+        # Проверяем Secret авторизацию (для веб-версии)
         secret = session.get('secret')
-        if not secret or not is_valid_secret(secret):
-            return jsonify({"error": "Требуется авторизация", "authenticated": False}), 401
-        return f(*args, **kwargs)
+        if secret and is_valid_secret(secret):
+            return f(*args, **kwargs)
+        
+        # Не авторизован
+        return jsonify({"error": "Требуется авторизация", "authenticated": False}), 401
     return decorated_function
 
 
@@ -332,10 +365,17 @@ class UserProgress:
 # Функция для получения текущего user_progress из сессии
 def get_current_user_progress() -> UserProgress:
     """Получение UserProgress для текущего авторизованного пользователя"""
+    # Проверяем Telegram авторизацию
+    telegram_user_id = session.get('telegram_user_id')
+    if telegram_user_id:
+        return get_telegram_user_progress(telegram_user_id)
+    
+    # Проверяем Secret авторизацию
     secret = session.get('secret')
-    if not secret:
-        raise ValueError("Пользователь не авторизован")
-    return get_user_progress(secret)
+    if secret:
+        return get_user_progress(secret)
+    
+    raise ValueError("Пользователь не авторизован")
 
 
 @app.route('/')
@@ -407,6 +447,10 @@ def login():
 def logout():
     """Выход из системы"""
     session.pop('secret', None)
+    session.pop('telegram_user_id', None)
+    session.pop('telegram_username', None)
+    session.pop('telegram_first_name', None)
+    session.pop('telegram_last_name', None)
     return jsonify({
         "success": True,
         "authenticated": False,
@@ -420,11 +464,84 @@ def auth_status():
     # Убеждаемся, что сессия постоянная
     session.permanent = True
     secret = session.get('secret')
-    authenticated = secret and is_valid_secret(secret)
+    telegram_user_id = session.get('telegram_user_id')
+    
+    authenticated = (secret and is_valid_secret(secret)) or bool(telegram_user_id)
     
     return jsonify({
         "authenticated": authenticated,
-        "has_secret": bool(secret)
+        "has_secret": bool(secret),
+        "has_telegram": bool(telegram_user_id)
+    })
+
+
+@app.route('/api/auth/telegram', methods=['POST'])
+def telegram_login():
+    """Авторизация через Telegram Mini App initData"""
+    if not TELEGRAM_BOT_TOKEN:
+        logging.error("TELEGRAM_BOT_TOKEN не установлен")
+        return jsonify({
+            "error": "Telegram авторизация не настроена на сервере",
+            "authenticated": False
+        }), 500
+    
+    data = request.get_json()
+    init_data = data.get('init_data', '').strip() if data else ''
+    
+    if not init_data:
+        return jsonify({
+            "error": "init_data не указан",
+            "authenticated": False
+        }), 400
+    
+    # Валидируем initData
+    is_valid, telegram_data = telegram_auth.verify_telegram_init_data(
+        init_data,
+        TELEGRAM_BOT_TOKEN,
+        TELEGRAM_AUTH_MAX_AGE_SECONDS
+    )
+    
+    if not is_valid or not telegram_data:
+        logging.warning("Telegram initData validation failed")
+        return jsonify({
+            "error": "Неверные данные авторизации Telegram",
+            "authenticated": False
+        }), 401
+    
+    # Извлекаем user_id из данных
+    user_data = telegram_data.get('user')
+    if not user_data or 'id' not in user_data:
+        logging.warning("Telegram user data missing or invalid")
+        return jsonify({
+            "error": "Данные пользователя Telegram не найдены",
+            "authenticated": False
+        }), 401
+    
+    telegram_user_id = user_data['id']
+    
+    # Сохраняем данные в сессии
+    session.permanent = True
+    session['telegram_user_id'] = telegram_user_id
+    session['telegram_username'] = user_data.get('username')
+    session['telegram_first_name'] = user_data.get('first_name')
+    session['telegram_last_name'] = user_data.get('last_name')
+    
+    # Очищаем Secret сессию если была (чтобы не было конфликта)
+    if 'secret' in session:
+        del session['secret']
+    
+    logging.info(f"Telegram user authorized: {telegram_user_id} (@{user_data.get('username', 'no_username')})")
+    
+    return jsonify({
+        "success": True,
+        "authenticated": True,
+        "user": {
+            "id": telegram_user_id,
+            "username": user_data.get('username'),
+            "first_name": user_data.get('first_name'),
+            "last_name": user_data.get('last_name')
+        },
+        "message": "Авторизация через Telegram успешна"
     })
 
 
