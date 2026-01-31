@@ -843,5 +843,6 @@ if __name__ == '__main__':
         app.run(debug=True, host='0.0.0.0', port=5002)
     else:
         logging.info("🚀 Продакшен режим: debug=False")
-        app.run(debug=False, host='127.0.0.1', port=5002)
+        # В контейнере/при пробросе портов нужно слушать 0.0.0.0
+        app.run(debug=False, host='0.0.0.0', port=5002)
 
