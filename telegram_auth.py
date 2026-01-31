@@ -21,12 +21,15 @@ def build_data_check_string(params: Dict[str, str]) -> str:
     """
     Построение data-check-string для валидации.
     
-    Все поля кроме 'hash' и 'signature' сортируются по алфавиту
+    Все поля кроме 'hash' сортируются по алфавиту
     и объединяются в строку формата: key=value\nkey=value\n...
+    
+    ВАЖНО: После Bot API 8.0+ может приходить поле 'signature', 
+    но оно НЕ должно исключаться из data-check-string для проверки hash.
+    Исключается только 'hash'.
     """
-    # Исключаем hash и signature из проверки
-    filtered_params = {k: v for k, v in params.items() 
-                      if k not in ('hash', 'signature')}
+    # Исключаем только hash из проверки (signature должен быть включён!)
+    filtered_params = {k: v for k, v in params.items() if k != 'hash'}
     
     # Сортируем по ключу
     sorted_params = sorted(filtered_params.items())
@@ -62,6 +65,12 @@ def verify_telegram_init_data(
     try:
         # Парсим query string
         params = parse_init_data(init_data)
+        
+        # Логируем ключи для диагностики
+        param_keys = sorted(params.keys())
+        logger.debug(f"initData keys: {param_keys}")
+        if 'signature' in params:
+            logger.debug("initData contains 'signature' field (Bot API 8.0+)")
         
         # Проверяем наличие обязательных полей
         if 'hash' not in params:
@@ -111,8 +120,11 @@ def verify_telegram_init_data(
         
         # Сравниваем хеши (защита от timing attacks)
         if not hmac.compare_digest(calculated_hash, received_hash):
-            logger.warning(f"Hash mismatch in init_data. Calculated: {calculated_hash[:16]}..., Received: {received_hash[:16]}...")
-            logger.debug(f"Data check string: {data_check_string[:200]}...")
+            logger.warning(f"Hash mismatch in init_data.")
+            logger.warning(f"Calculated hash (first 16): {calculated_hash[:16]}...")
+            logger.warning(f"Received hash (first 16): {received_hash[:16]}...")
+            logger.debug(f"Data check string (first 200 chars): {data_check_string[:200]}...")
+            logger.debug(f"Params keys (excluding hash): {sorted([k for k in params.keys() if k != 'hash'])}")
             return False, None
         
         # Парсим user если есть

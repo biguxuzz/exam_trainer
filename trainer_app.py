@@ -93,6 +93,54 @@ def load_secrets():
         return []
 
 
+def register_telegram_user(telegram_user_id: int, username: str = None):
+    """Регистрация Telegram пользователя в secrets_config.json"""
+    user_key = f"tg_{telegram_user_id}"
+    
+    # Загружаем существующие секреты
+    secrets_list = []
+    config_data = {}
+    
+    if os.path.exists(SECRETS_CONFIG_FILE):
+        try:
+            with open(SECRETS_CONFIG_FILE, 'r', encoding='utf-8') as f:
+                config_data = json.load(f)
+                secrets_list = config_data.get("secrets", [])
+        except Exception as e:
+            logging.error(f"Ошибка чтения конфигурации: {e}")
+            secrets_list = []
+    
+    # Проверяем, не существует ли уже такой пользователь
+    if user_key in secrets_list:
+        logging.debug(f"Telegram user {telegram_user_id} уже зарегистрирован")
+        return
+    
+    # Добавляем нового пользователя
+    secrets_list.append(user_key)
+    config_data["secrets"] = secrets_list
+    
+    # Добавляем метаданные Telegram пользователей (опционально)
+    if "telegram_users" not in config_data:
+        config_data["telegram_users"] = {}
+    
+    config_data["telegram_users"][str(telegram_user_id)] = {
+        "user_key": user_key,
+        "username": username,
+        "registered_at": datetime.now().isoformat()
+    }
+    
+    # Сохраняем обновлённую конфигурацию
+    try:
+        # Атомарное сохранение через временный файл
+        temp_file = SECRETS_CONFIG_FILE + '.tmp'
+        with open(temp_file, 'w', encoding='utf-8') as f:
+            json.dump(config_data, f, ensure_ascii=False, indent=2)
+        os.replace(temp_file, SECRETS_CONFIG_FILE)
+        logging.info(f"Telegram user {telegram_user_id} (@{username or 'no_username'}) зарегистрирован в secrets_config.json")
+    except Exception as e:
+        logging.error(f"Ошибка сохранения конфигурации для Telegram user {telegram_user_id}: {e}")
+
+
 def is_valid_secret(secret: str) -> bool:
     """Проверка валидности Secret"""
     if not secret:
@@ -504,6 +552,17 @@ def telegram_login():
         )
         
         if not is_valid or not telegram_data:
+            # Парсим init_data для диагностики
+            try:
+                import urllib.parse
+                parsed_params = dict(urllib.parse.parse_qsl(init_data))
+                param_keys = sorted(parsed_params.keys())
+                logging.warning(f"Telegram initData validation failed. Keys in init_data: {param_keys}")
+                if 'signature' in parsed_params:
+                    logging.warning("initData contains 'signature' - ensure signature is included in data_check_string")
+            except Exception:
+                pass
+            
             logging.warning(f"Telegram initData validation failed. init_data length: {len(init_data)}, has_token: {bool(TELEGRAM_BOT_TOKEN)}")
             # Логируем первые 100 символов init_data для отладки (безопасно, так как это не секрет)
             if init_data:
@@ -537,11 +596,18 @@ def telegram_login():
         }), 401
     
     telegram_user_id = user_data['id']
+    telegram_username = user_data.get('username')
+    
+    # Регистрируем Telegram пользователя в secrets_config.json (если ещё не зарегистрирован)
+    register_telegram_user(telegram_user_id, telegram_username)
+    
+    # Создаём папку и файл прогресса для пользователя (если ещё не созданы)
+    get_telegram_user_progress(telegram_user_id)
     
     # Сохраняем данные в сессии
     session.permanent = True
     session['telegram_user_id'] = telegram_user_id
-    session['telegram_username'] = user_data.get('username')
+    session['telegram_username'] = telegram_username
     session['telegram_first_name'] = user_data.get('first_name')
     session['telegram_last_name'] = user_data.get('last_name')
     
@@ -549,7 +615,7 @@ def telegram_login():
     if 'secret' in session:
         del session['secret']
     
-    logging.info(f"Telegram user authorized: {telegram_user_id} (@{user_data.get('username', 'no_username')})")
+    logging.info(f"Telegram user authorized: {telegram_user_id} (@{telegram_username or 'no_username'})")
     
     return jsonify({
         "success": True,
