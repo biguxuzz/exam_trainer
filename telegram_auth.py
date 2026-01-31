@@ -94,10 +94,11 @@ def verify_telegram_init_data(
         # Строим data-check-string
         data_check_string = build_data_check_string(params)
         
-        # Вычисляем secret_key = HMAC-SHA256(bot_token, "WebAppData")
+        # Вычисляем secret_key = HMAC-SHA256(key=bot_token, msg="WebAppData")
+        # ВАЖНО: key=bot_token, msg="WebAppData" (не наоборот!)
         secret_key = hmac.new(
-            "WebAppData".encode('utf-8'),
             bot_token.encode('utf-8'),
+            b"WebAppData",
             hashlib.sha256
         ).digest()
         
