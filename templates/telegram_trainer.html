@@ -550,6 +550,11 @@
             <button class="header-btn" data-mode="test" onclick="switchMode('test')">Тест</button>
             <button class="header-btn" data-mode="result" onclick="switchMode('result')">Результат</button>
         </div>
+        <div style="margin-top: 8px;">
+            <select id="exam-select" style="width: 100%; padding: 8px 12px; background: var(--tg-theme-secondary-bg-color); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--tg-theme-text-color); font-size: 0.9rem;" onchange="switchExam()">
+                <option value="">Загрузка экзаменов...</option>
+            </select>
+        </div>
     </div>
 
     <!-- CONTENT -->
@@ -844,10 +849,10 @@
             }
             
             // После успешной авторизации загружаем данные
+            // Сначала загружаем экзамены и выбираем текущий
             await loadExams();
-            await loadStatistics();
-            await loadQuestions();
-            renderSections();
+            // loadStatistics и loadQuestions будут вызваны в loadExams или switchExam
+            // если экзамен уже выбран, или после выбора экзамена
             
             // Setup Telegram BackButton
             tg.BackButton.onClick(() => {
@@ -890,35 +895,155 @@
 
         async function loadExams() {
             try {
-                const response = await fetch(`${API_BASE}/exams`);
+                const response = await fetch(`${API_BASE}/exams`, {
+                    credentials: 'include'
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
                 const data = await response.json();
-                state.currentExam = data.current_exam;
+                
+                // Устанавливаем текущий экзамен
+                state.currentExam = data.current_exam || (data.exams && data.exams.length > 0 ? data.exams[0] : '');
+                
+                // Заполняем селектор экзаменов
+                const select = document.getElementById('exam-select');
+                if (select && data.exams && data.exams.length > 0) {
+                    select.innerHTML = data.exams.map(exam => 
+                        `<option value="${exam}" ${exam === state.currentExam ? 'selected' : ''}>${exam}</option>`
+                    ).join('');
+                } else if (select) {
+                    select.innerHTML = '<option value="">Нет доступных экзаменов</option>';
+                }
+                
+                // Если экзамен не выбран, выбираем первый доступный
+                if (!state.currentExam && data.exams && data.exams.length > 0) {
+                    state.currentExam = data.exams[0];
+                    // Обновляем селектор
+                    const select = document.getElementById('exam-select');
+                    if (select) {
+                        Array.from(select.options).forEach(opt => {
+                            opt.selected = opt.value === state.currentExam;
+                        });
+                    }
+                    // Переключаемся на экзамен (это загрузит статистику и вопросы)
+                    await switchExam(state.currentExam);
+                } else if (state.currentExam) {
+                    // Если экзамен уже выбран, просто загружаем данные
+                    await loadStatistics();
+                    await loadQuestions();
+                    if (state.sections && state.sections.length > 0) {
+                        renderSections();
+                    }
+                }
             } catch (error) {
                 console.error('Error loading exams:', error);
-                tg.showAlert('Ошибка загрузки экзаменов');
+                tg.showAlert('Ошибка загрузки экзаменов: ' + (error.message || 'Неизвестная ошибка'));
+                const select = document.getElementById('exam-select');
+                if (select) {
+                    select.innerHTML = '<option value="">Ошибка загрузки</option>';
+                }
+            }
+        }
+        
+        async function switchExam(examName) {
+            // Если examName не передан, берём из селектора
+            if (!examName) {
+                const select = document.getElementById('exam-select');
+                examName = select ? select.value : null;
+            }
+            
+            if (!examName) {
+                tg.showAlert('Выберите экзамен');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/exam/switch`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
+                    body: JSON.stringify({exam_name: examName})
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                state.currentExam = examName;
+                
+                // Обновляем селектор
+                const select = document.getElementById('exam-select');
+                if (select) {
+                    Array.from(select.options).forEach(opt => {
+                        opt.selected = opt.value === examName;
+                    });
+                }
+                
+                // Перезагружаем данные для нового экзамена
+                await loadStatistics();
+                await loadQuestions();
+                // renderSections вызывается после loadStatistics, так как использует state.sections
+                renderSections();
+                
+                // Если мы на главной странице, обновляем её
+                if (state.currentPage === 'main-home') {
+                    goToPage('main-home');
+                }
+                
+                tg.HapticFeedback.impactOccurred('light');
+            } catch (error) {
+                console.error('Error switching exam:', error);
+                tg.showAlert('Ошибка переключения экзамена: ' + (error.message || 'Неизвестная ошибка'));
             }
         }
 
         async function loadStatistics() {
+            // Проверяем, что экзамен выбран
+            if (!state.currentExam) {
+                console.warn('Экзамен не выбран, пропускаем загрузку статистики');
+                return;
+            }
+            
             try {
-                const response = await fetch(`${API_BASE}/statistics`);
+                const response = await fetch(`${API_BASE}/statistics`, {
+                    credentials: 'include'
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.warn('Не авторизован для загрузки статистики');
+                        return;
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
                 const data = await response.json();
-                state.stats = data.overall;
-                state.sections = data.sections;
+                state.stats = data.overall || {};
+                state.sections = data.sections || [];
                 
-                document.getElementById('stat-total').textContent = data.overall.total_verified;
-                document.getElementById('stat-mastered').textContent = data.overall.mastered;
-                document.getElementById('stat-attempted').textContent = data.overall.attempted;
-                document.getElementById('stat-accuracy').textContent = `${data.overall.accuracy}%`;
-                
-                document.getElementById('test-stat-total').textContent = data.overall.total_verified;
-                document.getElementById('test-stat-mastered').textContent = data.overall.mastered;
+                if (data.overall) {
+                    document.getElementById('stat-total').textContent = data.overall.total_verified || 0;
+                    document.getElementById('stat-mastered').textContent = data.overall.mastered || 0;
+                    document.getElementById('stat-attempted').textContent = data.overall.attempted || 0;
+                    document.getElementById('stat-accuracy').textContent = `${data.overall.accuracy || 0}%`;
+                    
+                    document.getElementById('test-stat-total').textContent = data.overall.total_verified || 0;
+                    document.getElementById('test-stat-mastered').textContent = data.overall.mastered || 0;
+                }
             } catch (error) {
                 console.error('Error loading statistics:', error);
             }
         }
 
         async function loadQuestions() {
+            // Проверяем, что экзамен выбран
+            if (!state.currentExam) {
+                console.warn('Экзамен не выбран, пропускаем загрузку вопросов');
+                return;
+            }
+            
             try {
                 const params = new URLSearchParams({
                     hide_mastered: 'true',
@@ -927,15 +1052,26 @@
                     search: ''
                 });
                 
-                const response = await fetch(`${API_BASE}/questions?${params}`);
+                const response = await fetch(`${API_BASE}/questions?${params}`, {
+                    credentials: 'include'
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        tg.showAlert('Требуется авторизация. Перезагрузите приложение.');
+                        return;
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
                 const data = await response.json();
-                state.questions = data.questions;
-                state.filteredQuestions = data.questions;
+                state.questions = data.questions || [];
+                state.filteredQuestions = data.questions || [];
                 
                 renderQuestionList();
             } catch (error) {
                 console.error('Error loading questions:', error);
-                tg.showAlert('Ошибка загрузки вопросов');
+                tg.showAlert('Ошибка загрузки вопросов: ' + (error.message || 'Неизвестная ошибка'));
             }
         }
 
@@ -944,6 +1080,7 @@
                 await fetch(`${API_BASE}/question/${questionId}/mastered`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
                     body: JSON.stringify({mastered})
                 });
                 await loadStatistics();
@@ -1002,26 +1139,51 @@
 
         // Render functions
         function renderSections() {
-            const html = state.sections.map(section => `
-                <div class="section-item" onclick="goToSectionQuestions(${section.section_number})">
-                    <div class="section-name">${section.section_number}. ${section.name}</div>
-                    <div class="section-progress">
-                        <div class="section-progress-bar" style="width: ${section.mastered_percent}%"></div>
+            if (!state.sections || state.sections.length === 0) {
+                document.getElementById('section-list').innerHTML = '<div style="padding: 16px; text-align: center; color: var(--tg-theme-hint-color);">Нет разделов</div>';
+                document.getElementById('test-section-list').innerHTML = '<div style="padding: 16px; text-align: center; color: var(--tg-theme-hint-color);">Нет разделов</div>';
+                return;
+            }
+            
+            const html = state.sections.map(section => {
+                const sectionNum = section.section_number !== undefined ? section.section_number : section.number;
+                const sectionName = section.name || `Раздел ${sectionNum}`;
+                const mastered = section.mastered || 0;
+                const total = section.total || 0;
+                const masteredPercent = section.mastered_percent || 0;
+                
+                return `
+                    <div class="section-item" onclick="goToSectionQuestions(${sectionNum})">
+                        <div class="section-name">${sectionNum}. ${sectionName}</div>
+                        <div class="section-progress">
+                            <div class="section-progress-bar" style="width: ${masteredPercent}%"></div>
+                        </div>
+                        <div class="section-stats">${mastered}/${total}</div>
                     </div>
-                    <div class="section-stats">${section.mastered}/${section.total}</div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
             
             document.getElementById('section-list').innerHTML = html;
-            document.getElementById('test-section-list').innerHTML = state.sections.map(section => `
-                <div class="section-item" onclick="startSectionTest(${section.section_number}, '${section.name}')">
-                    <div class="section-name">${section.section_number}. ${section.name}</div>
-                    <div class="section-progress">
-                        <div class="section-progress-bar" style="width: ${section.mastered_percent}%"></div>
+            
+            const testHtml = state.sections.map(section => {
+                const sectionNum = section.section_number !== undefined ? section.section_number : section.number;
+                const sectionName = section.name || `Раздел ${sectionNum}`;
+                const mastered = section.mastered || 0;
+                const total = section.total || 0;
+                const masteredPercent = section.mastered_percent || 0;
+                
+                return `
+                    <div class="section-item" onclick="startSectionTest(${sectionNum}, '${sectionName}')">
+                        <div class="section-name">${sectionNum}. ${sectionName}</div>
+                        <div class="section-progress">
+                            <div class="section-progress-bar" style="width: ${masteredPercent}%"></div>
+                        </div>
+                        <div class="section-stats">${mastered}/${total}</div>
                     </div>
-                    <div class="section-stats">${section.mastered}/${section.total}</div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
+            
+            document.getElementById('test-section-list').innerHTML = testHtml;
         }
 
         function renderQuestionList() {
@@ -1134,10 +1296,13 @@
                 await fetch(`${API_BASE}/question/${q.id}/check`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
                     body: JSON.stringify({selected_answers: [state.mainSelectedAnswer], dont_know: false})
                 });
                 
-                const response = await fetch(`${API_BASE}/question/${q.id}?show_answers=true`);
+                const response = await fetch(`${API_BASE}/question/${q.id}?show_answers=true`, {
+                    credentials: 'include'
+                });
                 const data = await response.json();
                 q.answers = data.question.answers;
                 q.progress = data.question.progress;
@@ -1209,7 +1374,9 @@
                     status: ''
                 });
                 
-                const response = await fetch(`${API_BASE}/questions?${params}`);
+                const response = await fetch(`${API_BASE}/questions?${params}`, {
+                    credentials: 'include'
+                });
                 const data = await response.json();
                 
                 let questions = data.questions;
@@ -1346,6 +1513,7 @@
                 const response = await fetch(`${API_BASE}/session/results`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
                     body: JSON.stringify({answers: answersToCheck})
                 });
                 const data = await response.json();
