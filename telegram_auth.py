@@ -103,11 +103,11 @@ def verify_telegram_init_data(
         # Строим data-check-string
         data_check_string = build_data_check_string(params)
         
-        # Вычисляем secret_key = HMAC-SHA256(key=bot_token, msg="WebAppData")
-        # ВАЖНО: key=bot_token, msg="WebAppData" (не наоборот!)
+        # Вычисляем secret_key = HMAC-SHA256(key="WebAppData", msg=bot_token)
+        # ВАЖНО: key="WebAppData", msg=bot_token (согласно официальной документации Telegram)
         secret_key = hmac.new(
-            bot_token.encode('utf-8'),
             b"WebAppData",
+            bot_token.encode('utf-8'),
             hashlib.sha256
         ).digest()
         
