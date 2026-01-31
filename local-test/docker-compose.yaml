@@ -1,0 +1,17 @@
+services:
+  exam_trainer:
+    image: bxxz/exam_trainer:latest
+    container_name: exam_trainer
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      # ВАЖНО: эти файлы должны быть в примонтированном томе ./secrets
+      - SECRETS_DIR=/app/secrets
+      - SECRETS_CONFIG_PATH=/app/secrets/secrets_config.json
+      - EXAM_DATA_DIR=/app/secrets
+    ports:
+      - "5002:5002"
+    volumes:
+      # Данные пользователей должны жить отдельно как том
+      - ./secrets:/app/secrets

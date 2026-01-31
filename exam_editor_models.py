@@ -105,7 +105,9 @@ class QuestionBank:
     
     # Определяем базовую директорию проекта
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    CONFIG_FILE = os.path.join(BASE_DIR, "sources", "exam_config.json")
+    # Папка/файл с экзаменами могут жить вне образа (например, в Docker volume)
+    EXAM_DATA_DIR = os.environ.get("EXAM_DATA_DIR") or os.path.join(BASE_DIR, "sources")
+    CONFIG_FILE = os.environ.get("EXAM_CONFIG_PATH") or os.path.join(EXAM_DATA_DIR, "exam_config.json")
     _exam_config = None  # Кэш конфигурации
     
     def __init__(self, exam_name: str = "1С:Руководитель проекта"):
@@ -128,7 +130,8 @@ class QuestionBank:
                     "exams": [
                         {
                             "name": "1С:Руководитель проекта",
-                            "file": "sources/rp_exam_questions.json",
+                            # По умолчанию ищем в EXAM_DATA_DIR (например, /app/secrets в Docker)
+                            "file": os.path.join(cls.EXAM_DATA_DIR, "rp_exam_questions.json"),
                             "description": "Экзамен по управлению проектами в 1С"
                         }
                     ]
@@ -147,16 +150,41 @@ class QuestionBank:
                 file_path = exam.get("file", "")
                 # Если путь относительный, делаем его абсолютным
                 if not os.path.isabs(file_path):
-                    return os.path.join(cls.BASE_DIR, file_path)
+                    candidates = []
+                    # Частый кейс: в конфиге пути вида "sources/xxx.json",
+                    # а реальные файлы лежат в EXAM_DATA_DIR (например, /app/secrets).
+                    if file_path.startswith("sources/") or file_path.startswith("sources\\"):
+                        stripped = file_path.split("/", 1)[1] if "/" in file_path else file_path.split("\\", 1)[1]
+                        candidates.append(os.path.join(cls.EXAM_DATA_DIR, stripped))
+
+                    # Путь относительно директории, где лежит exam_config.json
+                    candidates.append(os.path.join(os.path.dirname(cls.CONFIG_FILE), file_path))
+                    # Backward-compatible: путь относительно репозитория/кода
+                    candidates.append(os.path.join(cls.BASE_DIR, file_path))
+
+                    for p in candidates:
+                        if os.path.exists(p):
+                            return p
+                    # Если ничего не найдено — возвращаем самый “логичный” кандидат
+                    return candidates[0]
                 return file_path
         # Если экзамен не найден, возвращаем первый доступный или значение по умолчанию
         exams = config.get("exams", [])
         if exams:
             file_path = exams[0].get("file", "sources/rp_exam_questions.json")
             if not os.path.isabs(file_path):
+                # Используем ту же стратегию разрешения путей, что и выше
+                if file_path.startswith("sources/") or file_path.startswith("sources\\"):
+                    stripped = file_path.split("/", 1)[1] if "/" in file_path else file_path.split("\\", 1)[1]
+                    candidate = os.path.join(cls.EXAM_DATA_DIR, stripped)
+                    if os.path.exists(candidate):
+                        return candidate
+                candidate = os.path.join(os.path.dirname(cls.CONFIG_FILE), file_path)
+                if os.path.exists(candidate):
+                    return candidate
                 return os.path.join(cls.BASE_DIR, file_path)
             return file_path
-        default_path = os.path.join(cls.BASE_DIR, "sources", "rp_exam_questions.json")
+        default_path = os.path.join(cls.EXAM_DATA_DIR, "rp_exam_questions.json")
         return default_path
     
     def load_questions(self):

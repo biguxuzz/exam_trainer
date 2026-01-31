@@ -14,7 +14,8 @@ def generate_secret(length=32):
 
 def create_secret_folder(secret):
     """Создание папки для Secret и инициализация файла прогресса"""
-    secret_dir = f"secrets/{secret}"
+    secrets_root = os.environ.get("SECRETS_DIR") or "secrets"
+    secret_dir = os.path.join(secrets_root, secret)
     os.makedirs(secret_dir, exist_ok=True)
     
     # Создаём пустой файл прогресса
@@ -28,7 +29,7 @@ def create_secret_folder(secret):
 
 def register_secret(secret):
     """Регистрация Secret в конфигурационном файле"""
-    config_file = "secrets_config.json"
+    config_file = os.environ.get("SECRETS_CONFIG_PATH") or "secrets_config.json"
     
     # Загружаем существующие секреты
     secrets_list = []

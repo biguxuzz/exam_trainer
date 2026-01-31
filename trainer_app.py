@@ -38,8 +38,9 @@ logging.basicConfig(
 # Конфигурация Secret
 # Определяем базовую директорию проекта
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SECRETS_CONFIG_FILE = os.path.join(BASE_DIR, "secrets_config.json")
-SECRETS_DIR = os.path.join(BASE_DIR, "secrets")
+# Путь к конфигу/папке можно переопределить через окружение (удобно для Docker volume)
+SECRETS_CONFIG_FILE = os.environ.get("SECRETS_CONFIG_PATH") or os.path.join(BASE_DIR, "secrets_config.json")
+SECRETS_DIR = os.environ.get("SECRETS_DIR") or os.path.join(BASE_DIR, "secrets")
 
 # Глобальный словарь для хранения экземпляров UserProgress по Secret
 user_progress_cache: Dict[str, 'UserProgress'] = {}

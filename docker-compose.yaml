@@ -7,6 +7,10 @@ services:
       - SECRET_KEY=${SECRET_KEY:-}
       - FLASK_ENV=${FLASK_ENV:-development}
       - PYTHONUNBUFFERED=1
+      # Храним user secrets и банк вопросов в томе
+      - SECRETS_DIR=/app/secrets
+      - SECRETS_CONFIG_PATH=/app/secrets/secrets_config.json
+      - EXAM_DATA_DIR=/app/secrets
     ports:
       - "5002:5002"
     volumes:
@@ -19,6 +23,8 @@ services:
     image: exam_trainer:latest
     environment:
       - PYTHONUNBUFFERED=1
+      - SECRETS_DIR=/app/secrets
+      - SECRETS_CONFIG_PATH=/app/secrets/secrets_config.json
     volumes:
       - ./secrets:/app/secrets
     command: ["python", "/app/generate_secret.py"]

@@ -3,7 +3,10 @@ FROM python:3.12-slim
 WORKDIR /app
 
 ENV PYTHONUNBUFFERED=1 \
-    PIP_NO_CACHE_DIR=1
+    PIP_NO_CACHE_DIR=1 \
+    SECRETS_DIR=/app/secrets \
+    SECRETS_CONFIG_PATH=/app/secrets/secrets_config.json \
+    EXAM_DATA_DIR=/app/secrets
 
 COPY requirements.txt /app/requirements.txt
 RUN python -m pip install --upgrade pip \
