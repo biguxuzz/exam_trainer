@@ -759,6 +759,9 @@
         tg.ready();
         tg.expand();
 
+        // API
+        const API_BASE = '/api';
+
         // State
         const state = {
             currentMode: 'main',
@@ -781,8 +784,66 @@
             sections: []
         };
 
+        // Telegram authentication
+        async function authenticateTelegram() {
+            // Проверяем, что мы запущены в Telegram
+            if (!window.Telegram || !window.Telegram.WebApp) {
+                // Если открыто не через Telegram - показываем сообщение, но не блокируем критично
+                console.warn('Telegram WebApp API не доступен - возможно открыто не через Telegram');
+                return false;
+            }
+            
+            const initData = tg.initData;
+            if (!initData) {
+                // initData может отсутствовать в некоторых случаях (например, при прямом открытии)
+                console.warn('Telegram initData не найден');
+                return false;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/auth/telegram`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
+                    body: JSON.stringify({init_data: initData})
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.authenticated) {
+                    return true;
+                } else {
+                    tg.showAlert(data.error || 'Ошибка авторизации через Telegram');
+                    return false;
+                }
+            } catch (error) {
+                console.error('Telegram auth error:', error);
+                tg.showAlert('Ошибка подключения к серверу');
+                return false;
+            }
+        }
+        
         // Initialize
         document.addEventListener('DOMContentLoaded', async () => {
+            // Сначала авторизуемся через Telegram
+            const authSuccess = await authenticateTelegram();
+            if (!authSuccess) {
+                // Если авторизация не удалась, показываем сообщение и не загружаем данные
+                document.body.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; text-align: center;">
+                        <div>
+                            <div style="font-size: 2rem; margin-bottom: 16px;">⚠️</div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">Ошибка авторизации</div>
+                            <div style="color: var(--tg-theme-hint-color); font-size: 0.9rem;">
+                                Приложение должно быть открыто через Telegram
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // После успешной авторизации загружаем данные
             await loadExams();
             await loadStatistics();
             await loadQuestions();
@@ -826,9 +887,6 @@
                 goToPage('result-questions');
             }
         }
-
-        // API
-        const API_BASE = '/api';
 
         async function loadExams() {
             try {
