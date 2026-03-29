@@ -12,6 +12,7 @@ COPY requirements.txt /app/requirements.txt
 RUN python -m pip install --upgrade pip \
     && python -m pip install -r /app/requirements.txt
 
+ARG CACHEBUST
 COPY . /app
 
 RUN chmod +x /app/docker-entrypoint.sh \
