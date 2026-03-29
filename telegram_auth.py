@@ -3,6 +3,7 @@
 """
 import hmac
 import hashlib
+import base64
 import urllib.parse
 import time
 import json
@@ -128,13 +129,47 @@ def verify_telegram_init_data(
         
         # Сравниваем хеши (защита от timing attacks)
         if not hmac.compare_digest(calculated_hash, received_hash):
-            logger.warning(f"[{context}] Hash mismatch!")
+            logger.warning(f"[{context}] Hash mismatch (method=raw_string)!")
             logger.warning(f"[{context}] Calculated: {calculated_hash[:16]}... | Received: {received_hash[:16]}...")
-            logger.warning(f"[{context}] token_prefix={bot_token[:8]}..., "
-                           f"data_check_string (first 300): {data_check_string[:300]}")
+            logger.warning(f"[{context}] Full data_check_string:\n{data_check_string}")
+
+            # Пробуем альтернативные варианты алгоритма (для отладки MAX)
+            alt_methods = {}
+            try:
+                # Вариант 2: base64url-декодированный токен → байты
+                tok_dec = base64.urlsafe_b64decode(bot_token + '==')
+                sk2 = hmac.new(b"WebAppData", tok_dec, hashlib.sha256).digest()
+                alt_methods['b64url_token'] = hmac.new(sk2, data_check_string.encode('utf-8'), hashlib.sha256).hexdigest()
+            except Exception:
+                pass
+            try:
+                # Вариант 3: перестановка key/msg первого HMAC
+                sk3 = hmac.new(bot_token.encode('utf-8'), b"WebAppData", hashlib.sha256).digest()
+                alt_methods['swapped_key_msg'] = hmac.new(sk3, data_check_string.encode('utf-8'), hashlib.sha256).hexdigest()
+            except Exception:
+                pass
+            try:
+                # Вариант 4: без промежуточного HMAC — прямо токен как ключ
+                alt_methods['direct_token_key'] = hmac.new(bot_token.encode('utf-8'), data_check_string.encode('utf-8'), hashlib.sha256).hexdigest()
+            except Exception:
+                pass
+            try:
+                # Вариант 5: б64url-декодированный токен как прямой ключ
+                tok_dec = base64.urlsafe_b64decode(bot_token + '==')
+                alt_methods['direct_b64_key'] = hmac.new(tok_dec, data_check_string.encode('utf-8'), hashlib.sha256).hexdigest()
+            except Exception:
+                pass
+
+            matched = [name for name, h in alt_methods.items() if hmac.compare_digest(h, received_hash)]
+            if matched:
+                logger.warning(f"[{context}] ALTERNATIVE METHOD MATCHED: {matched}!")
+            else:
+                logger.warning(f"[{context}] No alternative matched. Alt prefixes: "
+                               + ", ".join(f"{n}={h[:8]}" for n, h in alt_methods.items()))
+
             return False, None, (
                 f"hash_mismatch (calc={calculated_hash[:8]}... recv={received_hash[:8]}..., "
-                f"token={bot_token[:8]}..., keys={sorted(k for k in params if k != 'hash')})"
+                f"token={bot_token[:8]}..., alts_checked={list(alt_methods.keys())})"
             )
 
         # Парсим user если есть
