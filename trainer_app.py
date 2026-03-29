@@ -623,12 +623,13 @@ def telegram_login():
     
     # Валидируем initData
     try:
-        is_valid, telegram_data = telegram_auth.verify_telegram_init_data(
+        is_valid, telegram_data, fail_reason = telegram_auth.verify_telegram_init_data(
             init_data,
             TELEGRAM_BOT_TOKEN,
-            TELEGRAM_AUTH_MAX_AGE_SECONDS
+            TELEGRAM_AUTH_MAX_AGE_SECONDS,
+            context="Telegram"
         )
-        
+
         if not is_valid or not telegram_data:
             # Парсим init_data для диагностики
             try:
@@ -732,7 +733,7 @@ def max_login():
     try:
         logging.info(f"MAX auth attempt: init_data length={len(init_data)}, "
                      f"token_prefix={MAX_BOT_TOKEN[:8] if MAX_BOT_TOKEN else 'EMPTY'}...")
-        is_valid, max_data = telegram_auth.verify_telegram_init_data(
+        is_valid, max_data, fail_reason = telegram_auth.verify_telegram_init_data(
             init_data,
             MAX_BOT_TOKEN,
             MAX_AUTH_MAX_AGE_SECONDS,
@@ -740,14 +741,9 @@ def max_login():
         )
 
         if not is_valid or not max_data:
-            logging.warning(f"MAX initData validation failed. "
-                            f"init_data_len={len(init_data)}, "
-                            f"token_set={bool(MAX_BOT_TOKEN)}, "
-                            f"token_prefix={MAX_BOT_TOKEN[:8] if MAX_BOT_TOKEN else 'EMPTY'}... "
-                            f"— проверьте логи выше для причины отказа")
+            logging.warning(f"MAX initData validation failed: {fail_reason}")
             return jsonify({
-                "error": "Неверные данные авторизации MAX. "
-                         "Проверьте логи пода (kubectl logs) — там указана точная причина.",
+                "error": f"Ошибка авторизации MAX: {fail_reason}",
                 "authenticated": False
             }), 401
     except Exception as e:

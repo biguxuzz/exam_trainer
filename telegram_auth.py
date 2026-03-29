@@ -43,64 +43,70 @@ def verify_telegram_init_data(
     bot_token: str,
     max_age_seconds: int = 86400,
     context: str = "Telegram"
-) -> Tuple[bool, Optional[Dict]]:
+) -> Tuple[bool, Optional[Dict], str]:
     """
     Валидация initData от Telegram/MAX Mini App.
-    
-    Args:
-        init_data: Query string из WebApp.initData
-        bot_token: Токен бота
-        max_age_seconds: Максимальный возраст данных в секундах (по умолчанию 24 часа)
-        context: Метка для логов ("Telegram" или "MAX")
-    
+
     Returns:
-        Tuple[bool, Optional[Dict]]: (успех валидации, распарсенные данные или None)
+        Tuple[bool, Optional[Dict], str]: (успех, данные или None, причина отказа)
+        Причины: ok | missing_init_data | missing_token | missing_hash |
+                 auth_date_missing | auth_date_invalid | auth_date_future |
+                 auth_date_expired | hash_mismatch
     """
     if not init_data:
         logger.warning(f"[{context}] Missing init_data")
-        return False, None
-    
+        return False, None, "missing_init_data"
+
     if not bot_token:
         logger.error(f"[{context}] Missing bot_token!")
-        return False, None
-    
+        return False, None, "missing_token"
+
     try:
+        # Если MAX прислал весь фрагмент (WebAppData=...&WebAppPlatform=...)
+        # вместо только значения WebAppData — извлекаем нужную часть
+        if 'WebAppData=' in init_data and 'WebAppPlatform=' in init_data:
+            fragment_params = dict(urllib.parse.parse_qsl(init_data, keep_blank_values=True))
+            extracted = fragment_params.get('WebAppData', '')
+            if extracted:
+                logger.info(f"[{context}] Extracted WebAppData from full fragment")
+                init_data = extracted
+
         # Парсим query string
         params = parse_init_data(init_data)
-        
+
         # Логируем ключи для диагностики
         param_keys = sorted(params.keys())
         logger.info(f"[{context}] initData keys: {param_keys}, token_prefix: {bot_token[:8]}...")
-        
+
         # Проверяем наличие обязательных полей
         if 'hash' not in params:
-            logger.warning(f"[{context}] Missing 'hash' field in init_data. Keys found: {param_keys}")
-            return False, None
-        
+            logger.warning(f"[{context}] Missing 'hash' field. Keys found: {param_keys}")
+            return False, None, f"missing_hash (got keys: {param_keys})"
+
         received_hash = params['hash']
-        
+
         # Проверяем auth_date (свежесть данных)
         if 'auth_date' in params:
             try:
                 auth_date = int(params['auth_date'])
                 current_time = int(time.time())
                 age = current_time - auth_date
-                
+
                 logger.info(f"[{context}] auth_date age: {age}s (limit: {max_age_seconds}s)")
-                
+
                 if age < 0:
                     logger.warning(f"[{context}] auth_date is in the future: {auth_date}, now: {current_time}")
-                    return False, None
-                
+                    return False, None, f"auth_date_future (auth={auth_date}, now={current_time})"
+
                 if age > max_age_seconds:
                     logger.warning(f"[{context}] init_data is too old: {age}s > {max_age_seconds}s")
-                    return False, None
+                    return False, None, f"auth_date_expired ({age}s > {max_age_seconds}s)"
             except (ValueError, TypeError) as e:
                 logger.warning(f"[{context}] Invalid auth_date value: {e}")
-                return False, None
+                return False, None, f"auth_date_invalid ({e})"
         else:
             logger.warning(f"[{context}] Missing auth_date in init_data")
-            return False, None
+            return False, None, "auth_date_missing"
         
         # Строим data-check-string
         data_check_string = build_data_check_string(params)
@@ -126,17 +132,19 @@ def verify_telegram_init_data(
             logger.warning(f"[{context}] Calculated: {calculated_hash[:16]}... | Received: {received_hash[:16]}...")
             logger.warning(f"[{context}] token_prefix={bot_token[:8]}..., "
                            f"data_check_string (first 300): {data_check_string[:300]}")
-            return False, None
-        
+            return False, None, (
+                f"hash_mismatch (calc={calculated_hash[:8]}... recv={received_hash[:8]}..., "
+                f"token={bot_token[:8]}..., keys={sorted(k for k in params if k != 'hash')})"
+            )
+
         # Парсим user если есть
         user_data = None
         if 'user' in params:
             try:
                 user_data = json.loads(params['user'])
             except json.JSONDecodeError as e:
-                logger.warning(f"Failed to parse user data: {e}")
-                # Продолжаем, user не обязателен для всех типов Mini Apps
-        
+                logger.warning(f"[{context}] Failed to parse user data: {e}")
+
         # Возвращаем успех и распарсенные данные
         result = {
             'user': user_data,
@@ -146,9 +154,9 @@ def verify_telegram_init_data(
             'chat_type': params.get('chat_type'),
             'chat_instance': params.get('chat_instance'),
         }
-        
-        return True, result
-        
+
+        return True, result, "ok"
+
     except Exception as e:
-        logger.error(f"Error verifying init_data: {e}", exc_info=True)
-        return False, None
+        logger.error(f"[{context}] Error verifying init_data: {e}", exc_info=True)
+        return False, None, f"exception: {e}"
