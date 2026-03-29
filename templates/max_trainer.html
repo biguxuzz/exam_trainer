@@ -814,19 +814,6 @@
             }
 
             console.log('Attempting MAX auth, initData length:', initData.length);
-            console.log('initData first 100 chars:', initData.substring(0, 100));
-
-            // DEBUG: проверяем алгоритм хэша
-            try {
-                const dbgResp = await fetch(`${API_BASE}/debug/max-hash`, {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    credentials: 'include',
-                    body: JSON.stringify({init_data: initData})
-                });
-                const dbg = await dbgResp.json();
-                console.log('DEBUG max-hash result:', JSON.stringify(dbg, null, 2));
-            } catch(e) { console.warn('debug endpoint error:', e); }
 
             try {
                 const response = await fetch(`${API_BASE}/auth/max`, {
