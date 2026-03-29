@@ -41,25 +41,27 @@ def build_data_check_string(params: Dict[str, str]) -> str:
 def verify_telegram_init_data(
     init_data: str,
     bot_token: str,
-    max_age_seconds: int = 86400
+    max_age_seconds: int = 86400,
+    context: str = "Telegram"
 ) -> Tuple[bool, Optional[Dict]]:
     """
-    Валидация initData от Telegram Mini App.
+    Валидация initData от Telegram/MAX Mini App.
     
     Args:
-        init_data: Query string из Telegram.WebApp.initData
-        bot_token: Токен бота от BotFather
+        init_data: Query string из WebApp.initData
+        bot_token: Токен бота
         max_age_seconds: Максимальный возраст данных в секундах (по умолчанию 24 часа)
+        context: Метка для логов ("Telegram" или "MAX")
     
     Returns:
         Tuple[bool, Optional[Dict]]: (успех валидации, распарсенные данные или None)
     """
     if not init_data:
-        logger.warning("Missing init_data")
+        logger.warning(f"[{context}] Missing init_data")
         return False, None
     
     if not bot_token:
-        logger.error("Missing bot_token - TELEGRAM_BOT_TOKEN не установлен!")
+        logger.error(f"[{context}] Missing bot_token!")
         return False, None
     
     try:
@@ -68,13 +70,11 @@ def verify_telegram_init_data(
         
         # Логируем ключи для диагностики
         param_keys = sorted(params.keys())
-        logger.debug(f"initData keys: {param_keys}")
-        if 'signature' in params:
-            logger.debug("initData contains 'signature' field (Bot API 8.0+)")
+        logger.info(f"[{context}] initData keys: {param_keys}, token_prefix: {bot_token[:8]}...")
         
         # Проверяем наличие обязательных полей
         if 'hash' not in params:
-            logger.warning("Missing hash in init_data")
+            logger.warning(f"[{context}] Missing 'hash' field in init_data. Keys found: {param_keys}")
             return False, None
         
         received_hash = params['hash']
@@ -86,18 +86,20 @@ def verify_telegram_init_data(
                 current_time = int(time.time())
                 age = current_time - auth_date
                 
+                logger.info(f"[{context}] auth_date age: {age}s (limit: {max_age_seconds}s)")
+                
                 if age < 0:
-                    logger.warning(f"auth_date is in the future: {auth_date}")
+                    logger.warning(f"[{context}] auth_date is in the future: {auth_date}, now: {current_time}")
                     return False, None
                 
                 if age > max_age_seconds:
-                    logger.warning(f"init_data is too old: {age} seconds")
+                    logger.warning(f"[{context}] init_data is too old: {age}s > {max_age_seconds}s")
                     return False, None
             except (ValueError, TypeError) as e:
-                logger.warning(f"Invalid auth_date: {e}")
+                logger.warning(f"[{context}] Invalid auth_date value: {e}")
                 return False, None
         else:
-            logger.warning("Missing auth_date in init_data")
+            logger.warning(f"[{context}] Missing auth_date in init_data")
             return False, None
         
         # Строим data-check-string
@@ -120,11 +122,10 @@ def verify_telegram_init_data(
         
         # Сравниваем хеши (защита от timing attacks)
         if not hmac.compare_digest(calculated_hash, received_hash):
-            logger.warning(f"Hash mismatch in init_data.")
-            logger.warning(f"Calculated hash (first 16): {calculated_hash[:16]}...")
-            logger.warning(f"Received hash (first 16): {received_hash[:16]}...")
-            logger.debug(f"Data check string (first 200 chars): {data_check_string[:200]}...")
-            logger.debug(f"Params keys (excluding hash): {sorted([k for k in params.keys() if k != 'hash'])}")
+            logger.warning(f"[{context}] Hash mismatch!")
+            logger.warning(f"[{context}] Calculated: {calculated_hash[:16]}... | Received: {received_hash[:16]}...")
+            logger.warning(f"[{context}] token_prefix={bot_token[:8]}..., "
+                           f"data_check_string (first 300): {data_check_string[:300]}")
             return False, None
         
         # Парсим user если есть

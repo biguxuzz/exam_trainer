@@ -62,7 +62,7 @@ TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN', '')
 TELEGRAM_AUTH_MAX_AGE_SECONDS = int(os.environ.get('TELEGRAM_AUTH_MAX_AGE_SECONDS', '86400'))
 
 # Конфигурация MAX Mini App
-MAX_BOT_TOKEN = os.environ.get('MAX_BOT_TOKEN', '')
+MAX_BOT_TOKEN = os.environ.get('MAX_BOT_TOKEN', '').strip()
 MAX_AUTH_MAX_AGE_SECONDS = int(os.environ.get('MAX_AUTH_MAX_AGE_SECONDS', '86400'))
 
 
@@ -730,16 +730,24 @@ def max_login():
 
     # Валидируем initData (алгоритм идентичен Telegram)
     try:
+        logging.info(f"MAX auth attempt: init_data length={len(init_data)}, "
+                     f"token_prefix={MAX_BOT_TOKEN[:8] if MAX_BOT_TOKEN else 'EMPTY'}...")
         is_valid, max_data = telegram_auth.verify_telegram_init_data(
             init_data,
             MAX_BOT_TOKEN,
-            MAX_AUTH_MAX_AGE_SECONDS
+            MAX_AUTH_MAX_AGE_SECONDS,
+            context="MAX"
         )
 
         if not is_valid or not max_data:
-            logging.warning(f"MAX initData validation failed. init_data length: {len(init_data)}, has_token: {bool(MAX_BOT_TOKEN)}")
+            logging.warning(f"MAX initData validation failed. "
+                            f"init_data_len={len(init_data)}, "
+                            f"token_set={bool(MAX_BOT_TOKEN)}, "
+                            f"token_prefix={MAX_BOT_TOKEN[:8] if MAX_BOT_TOKEN else 'EMPTY'}... "
+                            f"— проверьте логи выше для причины отказа")
             return jsonify({
-                "error": "Неверные данные авторизации MAX. Проверьте, что MAX_BOT_TOKEN установлен правильно.",
+                "error": "Неверные данные авторизации MAX. "
+                         "Проверьте логи пода (kubectl logs) — там указана точная причина.",
                 "authenticated": False
             }), 401
     except Exception as e:
