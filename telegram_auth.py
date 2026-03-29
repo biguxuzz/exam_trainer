@@ -130,7 +130,8 @@ def verify_telegram_init_data(
         # Сравниваем хеши (защита от timing attacks)
         if not hmac.compare_digest(calculated_hash, received_hash):
             logger.warning(f"[{context}] Hash mismatch (method=raw_string)!")
-            logger.warning(f"[{context}] Calculated: {calculated_hash[:16]}... | Received: {received_hash[:16]}...")
+            logger.warning(f"[{context}] Calculated FULL: {calculated_hash}")
+            logger.warning(f"[{context}] Received  FULL: {received_hash}")
             logger.warning(f"[{context}] Full data_check_string:\n{data_check_string}")
 
             # Пробуем альтернативные варианты алгоритма (для отладки MAX)

@@ -1216,6 +1216,84 @@ def health():
     })
 
 
+@app.route('/api/debug/max-hash', methods=['POST'])
+def debug_max_hash():
+    """ВРЕМЕННЫЙ эндпоинт для диагностики алгоритма MAX.
+    Принимает сырой initData, возвращает результаты разных алгоритмов.
+    НЕ РАСКРЫВАЕТ токен, только первые 8 символов хэшей."""
+    import hmac as _hmac
+    import hashlib as _hashlib
+    import base64 as _base64
+    import urllib.parse as _urlparse
+
+    data = request.get_json() or {}
+    raw_init_data = data.get('init_data', '')
+
+    if not raw_init_data:
+        return jsonify({"error": "init_data required"}), 400
+
+    token = MAX_BOT_TOKEN
+    if not token:
+        return jsonify({"error": "MAX_BOT_TOKEN not set"}), 500
+
+    # Парсинг разными способами
+    parsed_std = dict(_urlparse.parse_qsl(raw_init_data, keep_blank_values=True))
+    parsed_nounquote = dict(_urlparse.parse_qsl(raw_init_data, keep_blank_values=True, encoding='utf-8'))
+
+    received_hash = parsed_std.get('hash', '')
+
+    # Строим data_check_string
+    def build_dcs(params):
+        pairs = sorted((k, v) for k, v in params.items() if k != 'hash')
+        return '\n'.join(f"{k}={v}" for k, v in pairs)
+
+    dcs = build_dcs(parsed_std)
+
+    tok_str = token.encode('utf-8')
+    try:
+        tok_dec = _base64.urlsafe_b64decode(token + '==')
+    except Exception:
+        tok_dec = None
+
+    def try_h(key_bytes, msg_bytes):
+        sk = _hmac.new(b"WebAppData", key_bytes, _hashlib.sha256).digest()
+        return _hmac.new(sk, msg_bytes, _hashlib.sha256).hexdigest()
+
+    dcs_bytes = dcs.encode('utf-8')
+    raw_bytes = raw_init_data.encode('utf-8')
+
+    results = {
+        "received_hash": received_hash,
+        "received_hash_len": len(received_hash),
+        "raw_init_data_len": len(raw_init_data),
+        "parsed_keys": sorted(parsed_std.keys()),
+        "dcs_len": len(dcs),
+        "dcs_first_100": dcs[:100],
+        "algorithms": {}
+    }
+
+    variants = {
+        "str_decoded_dcs": try_h(tok_str, dcs_bytes),
+        "str_raw_initdata": _hmac.new(
+            _hmac.new(b"WebAppData", tok_str, _hashlib.sha256).digest(),
+            raw_bytes, _hashlib.sha256).hexdigest(),
+    }
+    if tok_dec:
+        variants["dec_decoded_dcs"] = try_h(tok_dec, dcs_bytes)
+        variants["dec_direct"] = _hmac.new(tok_dec, dcs_bytes, _hashlib.sha256).hexdigest()
+    variants["str_direct"] = _hmac.new(tok_str, dcs_bytes, _hashlib.sha256).hexdigest()
+
+    for name, h in variants.items():
+        results["algorithms"][name] = {
+            "hash_prefix": h[:16],
+            "match": h == received_hash
+        }
+
+    logging.info(f"[MAX-DEBUG] raw_len={len(raw_init_data)}, parsed={sorted(parsed_std.keys())}, "
+                 f"recv={received_hash[:16]}..., dcs_len={len(dcs)}")
+    return jsonify(results)
+
+
 if __name__ == '__main__':
     os.makedirs('templates', exist_ok=True)
     os.makedirs('static', exist_ok=True)
