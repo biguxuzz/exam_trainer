@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Тренажёр экзаменов</title>
+    <script src="https://st.max.ru/js/max-web-app.js"></script>
+    <style>
+        :root {
+            --tg-theme-bg-color: #ffffff;
+            --tg-theme-text-color: #000000;
+            --tg-theme-hint-color: #707579;
+            --tg-theme-link-color: #0077ff;
+            --tg-theme-button-color: #0077ff;
+            --tg-theme-button-text-color: #ffffff;
+            --tg-theme-secondary-bg-color: #f4f4f5;
+            
+            --accent-blue: #0077ff;
+            --accent-green: #3fb950;
+            --accent-red: #f85149;
+            --accent-orange: #d29922;
+            --border-color: rgba(0,0,0,0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--tg-theme-bg-color);
+            color: var(--tg-theme-text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: var(--tg-theme-bg-color);
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .header-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 8px 12px;
+            background: var(--tg-theme-secondary-bg-color);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: var(--tg-theme-text-color);
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .header-btn:active { opacity: 0.7; }
+        .header-btn.active { background: var(--tg-theme-button-color); color: var(--tg-theme-button-text-color); }
+
+        /* ===== CONTENT ===== */
+        .content {
+            padding: 16px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active { display: block; }
+
+        /* ===== STATS GRID ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: var(--tg-theme-hint-color);
+            font-size: 0.85rem;
+        }
+
+        .stat-card.total .stat-value { color: var(--accent-blue); }
+        .stat-card.mastered .stat-value { color: var(--accent-green); }
+        .stat-card.attempted .stat-value { color: var(--accent-blue); }
+        .stat-card.accuracy .stat-value { color: var(--accent-orange); }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        /* ===== SECTION LIST ===== */
+        .section-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: var(--tg-theme-bg-color);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .section-item:active { opacity: 0.7; }
+
+        .section-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .section-progress {
+            width: 80px;
+            height: 6px;
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .section-progress-bar {
+            height: 100%;
+            background: var(--tg-theme-button-color);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .section-stats {
+            font-size: 0.85rem;
+            color: var(--tg-theme-hint-color);
+            min-width: 50px;
+            text-align: right;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+        }
+
+        .btn-secondary {
+            background: var(--tg-theme-secondary-bg-color);
+            color: var(--tg-theme-text-color);
+        }
+
+        .btn-success {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .btn:active { opacity: 0.7; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* ===== QUESTION LIST ===== */
+        .question-item {
+            padding: 14px;
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .question-item:active { opacity: 0.7; }
+
+        .question-number {
+            font-size: 0.85rem;
+            color: var(--tg-theme-hint-color);
+            margin-bottom: 6px;
+        }
+
+        .question-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .question-meta {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .badge-mastered { background: rgba(63,185,80,0.2); color: var(--accent-green); }
+        .badge-attempted { background: rgba(0,119,255,0.15); color: var(--accent-blue); }
+        .badge-error { background: rgba(248,81,73,0.2); color: var(--accent-red); }
+
+        /* ===== QUESTION CARD ===== */
+        .question-card {
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        .question-card-number {
+            font-size: 0.85rem;
+            color: var(--tg-theme-hint-color);
+            margin-bottom: 8px;
+        }
+
+        .question-card-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .answers-container {
+            margin-top: 20px;
+        }
+
+        .answers-title {
+            font-size: 0.9rem;
+            color: var(--tg-theme-hint-color);
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .answer-item {
+            padding: 14px;
+            background: var(--tg-theme-bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .answer-item:active:not(.disabled) { transform: scale(0.98); }
+        .answer-item.selected { border-color: var(--tg-theme-button-color); background: rgba(0,119,255,0.08); }
+        .answer-item.correct { border-color: var(--accent-green); background: rgba(63,185,80,0.1); }
+        .answer-item.incorrect { border-color: var(--accent-red); background: rgba(248,81,73,0.1); }
+        .answer-item.disabled { cursor: default; }
+
+        .answer-radio {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .answer-item.selected .answer-radio {
+            border-color: var(--tg-theme-button-color);
+            background: var(--tg-theme-button-color);
+            color: var(--tg-theme-button-text-color);
+        }
+
+        .answer-item.selected .answer-radio::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--tg-theme-button-text-color);
+            border-radius: 50%;
+        }
+
+        .answer-item.correct .answer-radio {
+            border-color: var(--accent-green);
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .answer-item.correct .answer-radio::after {
+            content: '✓';
+        }
+
+        .answer-item.incorrect.selected .answer-radio {
+            border-color: var(--accent-red);
+            background: var(--accent-red);
+            color: white;
+        }
+
+        .answer-item.incorrect.selected .answer-radio::after {
+            content: '✗';
+        }
+
+        .answer-text {
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .question-result {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .question-result.correct {
+            background: rgba(63,185,80,0.1);
+            border: 1px solid var(--accent-green);
+        }
+
+        .question-result.incorrect {
+            background: rgba(248,81,73,0.1);
+            border: 1px solid var(--accent-red);
+        }
+
+        .question-result-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        .question-result-text {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .question-result.correct .question-result-text { color: var(--accent-green); }
+        .question-result.incorrect .question-result-text { color: var(--accent-red); }
+
+        .question-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--tg-theme-secondary-bg-color);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: var(--tg-theme-text-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .nav-btn:active:not(:disabled) { opacity: 0.7; }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .nav-info {
+            flex: 1;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--tg-theme-hint-color);
+        }
+
+        /* ===== BREADCRUMB ===== */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--tg-theme-hint-color);
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
+
+        .breadcrumb a {
+            color: var(--tg-theme-link-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* ===== TEST MODE ===== */
+        .test-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .test-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 0.9rem;
+        }
+
+        .test-stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .test-stat-value {
+            font-weight: 600;
+        }
+
+        /* ===== RESULT MODE ===== */
+        .result-header {
+            text-align: center;
+            padding: 30px 20px;
+            background: var(--tg-theme-secondary-bg-color);
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .result-subtitle {
+            color: var(--tg-theme-hint-color);
+            font-size: 0.9rem;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .result-detail {
+            text-align: center;
+            padding: 12px;
+            background: var(--tg-theme-bg-color);
+            border-radius: var(--radius-sm);
+        }
+
+        .result-detail-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .result-detail-label {
+            color: var(--tg-theme-hint-color);
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        /* ===== UTILITIES ===== */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .mb-16 { margin-bottom: 16px; }
+        .mt-16 { margin-top: 16px; }
+
+        /* ===== LOADING ===== */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--tg-theme-hint-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-title" id="header-title">📚 Тренажёр</div>
+        <div class="header-actions">
+            <button class="header-btn active" data-mode="main" onclick="switchMode('main')">Основной</button>
+            <button class="header-btn" data-mode="test" onclick="switchMode('test')">Тест</button>
+            <button class="header-btn" data-mode="result" onclick="switchMode('result')">Результат</button>
+        </div>
+        <div style="margin-top: 8px;">
+            <select id="exam-select" style="width: 100%; padding: 8px 12px; background: var(--tg-theme-secondary-bg-color); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--tg-theme-text-color); font-size: 0.9rem;" onchange="switchExam()">
+                <option value="">Загрузка экзаменов...</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+        <!-- MAIN MODE - HOME -->
+        <div class="page active" id="page-main-home">
+            <div class="stats-grid">
+                <div class="stat-card total">
+                    <div class="stat-value" id="stat-total">0</div>
+                    <div class="stat-label">Всего</div>
+                </div>
+                <div class="stat-card mastered">
+                    <div class="stat-value" id="stat-mastered">0</div>
+                    <div class="stat-label">Усвоено</div>
+                </div>
+                <div class="stat-card attempted">
+                    <div class="stat-value" id="stat-attempted">0</div>
+                    <div class="stat-label">Пройдено</div>
+                </div>
+                <div class="stat-card accuracy">
+                    <div class="stat-value" id="stat-accuracy">0%</div>
+                    <div class="stat-label">Точность</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📋 Разделы</div>
+                <div id="section-list"></div>
+            </div>
+
+            <button class="btn btn-primary" onclick="goToPage('main-questions')">
+                📝 Все вопросы
+            </button>
+        </div>
+
+        <!-- MAIN MODE - QUESTIONS -->
+        <div class="page" id="page-main-questions">
+            <div class="breadcrumb">
+                <a onclick="goToPage('main-home')">Главная</a>
+                <span>/</span>
+                <span>Вопросы</span>
+            </div>
+            <div class="mb-16">
+                <span id="main-question-count" style="color: var(--tg-theme-hint-color); font-size: 0.9rem;">0 вопросов</span>
+            </div>
+            <div id="main-question-list"></div>
+        </div>
+
+        <!-- MAIN MODE - QUESTION CARD -->
+        <div class="page" id="page-main-card">
+            <div class="breadcrumb">
+                <a onclick="goToPage('main-home')">Главная</a>
+                <span>/</span>
+                <a onclick="goToPage('main-questions')">Вопросы</a>
+                <span>/</span>
+                <span>Карточка</span>
+            </div>
+
+            <div class="nav-bar">
+                <button class="nav-btn" onclick="goToPage('main-questions')" title="К списку">📋</button>
+                <button class="nav-btn" onclick="navQuestion('first')" title="В начало">⏮</button>
+                <button class="nav-btn" onclick="navQuestion('prev')" title="Предыдущий">←</button>
+                <span class="nav-info" id="main-nav-info">1 / 100</span>
+                <button class="nav-btn" onclick="navQuestion('next')" title="Следующий">→</button>
+                <button class="nav-btn" onclick="navQuestion('last')" title="В конец">⏭</button>
+            </div>
+
+            <div class="question-card" id="main-question-card"></div>
+        </div>
+
+        <!-- TEST MODE - HOME -->
+        <div class="page" id="page-test-home">
+            <div class="stats-grid">
+                <div class="stat-card total">
+                    <div class="stat-value" id="test-stat-total">0</div>
+                    <div class="stat-label">Всего</div>
+                </div>
+                <div class="stat-card mastered">
+                    <div class="stat-value" id="test-stat-mastered">0</div>
+                    <div class="stat-label">Усвоено</div>
+                </div>
+            </div>
+
+            <div class="card mb-16">
+                <div class="card-title">🎲 Быстрый старт</div>
+                <p style="color: var(--tg-theme-hint-color); margin-bottom: 12px; font-size: 0.9rem;">
+                    Пробный тест: случайный вопрос из каждого раздела
+                </p>
+                <button class="btn btn-primary" onclick="startRandomTest()">
+                    🚀 Пробный тест
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-title">📋 Тест по разделу</div>
+                <div id="test-section-list"></div>
+            </div>
+        </div>
+
+        <!-- TEST MODE - QUESTIONS -->
+        <div class="page" id="page-test-questions">
+            <div class="test-toolbar">
+                <div class="test-stats">
+                    <div class="test-stat">
+                        <span>Отвечено:</span>
+                        <span class="test-stat-value" id="test-answered">0</span>
+                    </div>
+                    <div class="test-stat">
+                        <span>Пропущено:</span>
+                        <span class="test-stat-value" id="test-skipped">0</span>
+                    </div>
+                </div>
+                <div style="margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap;">
+                    <button class="btn btn-success" style="width: auto; padding: 8px 16px;" onclick="finishTest()">✅ Завершить</button>
+                    <button class="btn btn-danger" style="width: auto; padding: 8px 16px;" onclick="confirmCancelTest()">✕ Отмена</button>
+                </div>
+            </div>
+            <div class="mb-16">
+                <span id="test-question-count" style="color: var(--tg-theme-hint-color); font-size: 0.9rem;">0 вопросов</span>
+            </div>
+            <div id="test-question-list"></div>
+        </div>
+
+        <!-- TEST MODE - QUESTION CARD -->
+        <div class="page" id="page-test-card">
+            <div class="test-toolbar" style="margin-bottom: 16px;">
+                <div class="test-stats">
+                    <div class="test-stat">
+                        <span>Отвечено:</span>
+                        <span class="test-stat-value" id="test-card-answered">0</span>
+                    </div>
+                </div>
+                <div style="margin-left: auto; display: flex; gap: 8px;">
+                    <button class="btn btn-success" style="width: auto; padding: 8px 16px;" onclick="finishTest()">✅ Завершить</button>
+                    <button class="btn btn-danger" style="width: auto; padding: 8px 16px;" onclick="confirmCancelTest()">✕ Отмена</button>
+                </div>
+            </div>
+
+            <div class="nav-bar">
+                <button class="nav-btn" onclick="goToPage('test-questions')" title="К списку">📋</button>
+                <button class="nav-btn" onclick="navTestQuestion('first')" title="В начало">⏮</button>
+                <button class="nav-btn" onclick="navTestQuestion('prev')" title="Предыдущий">←</button>
+                <span class="nav-info" id="test-nav-info">1 / 10</span>
+                <button class="nav-btn" onclick="navTestQuestion('next')" title="Следующий">→</button>
+                <button class="nav-btn" onclick="navTestQuestion('last')" title="В конец">⏭</button>
+            </div>
+
+            <div class="question-card" id="test-question-card"></div>
+        </div>
+
+        <!-- RESULT MODE - HOME -->
+        <div class="page" id="page-result-home">
+            <div id="result-content">
+                <div class="result-header" id="result-header">
+                    <div class="result-icon">📋</div>
+                    <div class="result-title">Нет результатов</div>
+                    <div class="result-subtitle">Пройдите тест, чтобы увидеть результаты</div>
+                </div>
+            </div>
+
+            <div class="text-center hidden" id="result-questions-btn-container">
+                <button class="btn btn-primary" onclick="goToPage('result-questions')">
+                    📝 Посмотреть вопросы
+                </button>
+            </div>
+        </div>
+
+        <!-- RESULT MODE - QUESTIONS -->
+        <div class="page" id="page-result-questions">
+            <div class="breadcrumb">
+                <a onclick="goToPage('result-home')">Результаты</a>
+                <span>/</span>
+                <span>Вопросы</span>
+            </div>
+            <div class="mb-16">
+                <span id="result-question-count" style="color: var(--tg-theme-hint-color); font-size: 0.9rem;">0 вопросов</span>
+            </div>
+            <div id="result-question-list"></div>
+        </div>
+
+        <!-- RESULT MODE - QUESTION CARD -->
+        <div class="page" id="page-result-card">
+            <div class="breadcrumb">
+                <a onclick="goToPage('result-home')">Результаты</a>
+                <span>/</span>
+                <a onclick="goToPage('result-questions')">Вопросы</a>
+                <span>/</span>
+                <span>Карточка</span>
+            </div>
+
+            <div class="nav-bar">
+                <button class="nav-btn" onclick="goToPage('result-questions')" title="К списку">📋</button>
+                <button class="nav-btn" onclick="navResultQuestion('first')" title="В начало">⏮</button>
+                <button class="nav-btn" onclick="navResultQuestion('prev')" title="Предыдущий">←</button>
+                <span class="nav-info" id="result-nav-info">1 / 10</span>
+                <button class="nav-btn" onclick="navResultQuestion('next')" title="Следующий">→</button>
+                <button class="nav-btn" onclick="navResultQuestion('last')" title="В конец">⏭</button>
+            </div>
+
+            <div class="question-card" id="result-question-card"></div>
+        </div>
+    </div>
+
+    <script>
+        // MAX Bridge WebApp API
+        const wa = window.WebApp || null;
+        if (wa) wa.ready();
+
+        // API
+        const API_BASE = '/api';
+
+        // State
+        const state = {
+            currentMode: 'main',
+            currentPage: 'main-home',
+            currentExam: '',
+            questions: [],
+            filteredQuestions: [],
+            currentQuestionIndex: 0,
+            mainSelectedAnswer: null,
+            mainChecked: false,
+            testActive: false,
+            testSection: null,
+            testQuestions: [],
+            testAnswers: {},
+            testCurrentIndex: 0,
+            testStartTime: null,
+            lastResult: null,
+            resultCurrentIndex: 0,
+            stats: {},
+            sections: []
+        };
+
+        // Haptic feedback helper (no-op if MAX Bridge unavailable)
+        const haptic = {
+            impact(style) { try { wa && wa.HapticFeedback && wa.HapticFeedback.impactOccurred(style); } catch(e) {} },
+            notification(type) { try { wa && wa.HapticFeedback && wa.HapticFeedback.notificationOccurred(type); } catch(e) {} }
+        };
+
+        // MAX authentication
+        async function authenticateMax() {
+            if (!wa) {
+                console.error('MAX Bridge (window.WebApp) не доступен');
+                return false;
+            }
+
+            const initData = wa.initData;
+            if (!initData) {
+                console.error('MAX initData не найден');
+                console.log('wa object:', {
+                    initData: wa.initData,
+                    initDataUnsafe: wa.initDataUnsafe,
+                    version: wa.version,
+                    platform: wa.platform
+                });
+                return false;
+            }
+
+            console.log('Attempting MAX auth, initData length:', initData.length);
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/max`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
+                    body: JSON.stringify({init_data: initData})
+                });
+
+                const data = await response.json();
+
+                console.log('Auth response:', {
+                    status: response.status,
+                    ok: response.ok,
+                    authenticated: data.authenticated,
+                    error: data.error
+                });
+
+                if (response.ok && data.authenticated) {
+                    console.log('MAX auth successful');
+                    return true;
+                } else {
+                    const errorMsg = data.error || 'Ошибка авторизации через MAX';
+                    console.error('MAX auth failed:', errorMsg);
+                    alert(errorMsg);
+                    return false;
+                }
+            } catch (error) {
+                console.error('MAX auth error:', error);
+                alert('Ошибка подключения к серверу: ' + error.message);
+                return false;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Сначала авторизуемся через MAX
+            const authSuccess = await authenticateMax();
+            if (!authSuccess) {
+                document.body.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; text-align: center;">
+                        <div>
+                            <div style="font-size: 2rem; margin-bottom: 16px;">⚠️</div>
+                            <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 8px;">Ошибка авторизации</div>
+                            <div style="color: var(--tg-theme-hint-color); font-size: 0.9rem;">
+                                Приложение должно быть открыто через MAX
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            // После успешной авторизации загружаем данные
+            await loadExams();
+
+            // Setup MAX BackButton
+            if (wa && wa.BackButton) {
+                wa.BackButton.onClick(() => {
+                    if (state.currentPage === 'main-home' || state.currentPage === 'test-home' || state.currentPage === 'result-home') {
+                        wa.BackButton.hide();
+                    } else {
+                        handleBackButton();
+                    }
+                });
+            }
+
+            updateBackButton();
+        });
+
+        function updateBackButton() {
+            if (!wa || !wa.BackButton) return;
+            const canGoBack = !['main-home', 'test-home', 'result-home'].includes(state.currentPage);
+            if (canGoBack) {
+                wa.BackButton.show();
+            } else {
+                wa.BackButton.hide();
+            }
+        }
+
+        function handleBackButton() {
+            if (state.currentPage === 'main-questions') {
+                goToPage('main-home');
+            } else if (state.currentPage === 'main-card') {
+                goToPage('main-questions');
+            } else if (state.currentPage === 'test-questions' || state.currentPage === 'test-card') {
+                if (state.testActive) {
+                    confirmCancelTest();
+                } else {
+                    goToPage('test-home');
+                }
+            } else if (state.currentPage === 'result-questions') {
+                goToPage('result-home');
+            } else if (state.currentPage === 'result-card') {
+                goToPage('result-questions');
+            }
+        }
+
+        async function loadExams() {
+            try {
+                const response = await fetch(`${API_BASE}/exams`, {
+                    credentials: 'include'
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const data = await response.json();
+
+                state.currentExam = data.current_exam || (data.exams && data.exams.length > 0 ? data.exams[0] : '');
+
+                const select = document.getElementById('exam-select');
+                if (select && data.exams && data.exams.length > 0) {
+                    select.innerHTML = data.exams.map(exam =>
+                        `<option value="${exam}" ${exam === state.currentExam ? 'selected' : ''}>${exam}</option>`
+                    ).join('');
+                } else if (select) {
+                    select.innerHTML = '<option value="">Нет доступных экзаменов</option>';
+                }
+
+                if (!state.currentExam && data.exams && data.exams.length > 0) {
+                    state.currentExam = data.exams[0];
+                    const select = document.getElementById('exam-select');
+                    if (select) {
+                        Array.from(select.options).forEach(opt => {
+                            opt.selected = opt.value === state.currentExam;
+                        });
+                    }
+                    await switchExam(state.currentExam);
+                } else if (state.currentExam) {
+                    await loadStatistics();
+                    await loadQuestions();
+                    if (state.sections && state.sections.length > 0) {
+                        renderSections();
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading exams:', error);
+                alert('Ошибка загрузки экзаменов: ' + (error.message || 'Неизвестная ошибка'));
+                const select = document.getElementById('exam-select');
+                if (select) {
+                    select.innerHTML = '<option value="">Ошибка загрузки</option>';
+                }
+            }
+        }
+
+        async function switchExam(examName) {
+            if (!examName) {
+                const select = document.getElementById('exam-select');
+                examName = select ? select.value : null;
+            }
+
+            if (!examName) {
+                alert('Выберите экзамен');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/exam/switch`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
+                    body: JSON.stringify({exam_name: examName})
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                state.currentExam = examName;
+
+                const select = document.getElementById('exam-select');
+                if (select) {
+                    Array.from(select.options).forEach(opt => {
+                        opt.selected = opt.value === examName;
+                    });
+                }
+
+                await loadStatistics();
+                await loadQuestions();
+                renderSections();
+
+                if (state.currentPage === 'main-home') {
+                    goToPage('main-home');
+                }
+
+                haptic.impact('light');
+            } catch (error) {
+                console.error('Error switching exam:', error);
+                alert('Ошибка переключения экзамена: ' + (error.message || 'Неизвестная ошибка'));
+            }
+        }
+
+        async function loadStatistics() {
+            if (!state.currentExam) {
+                console.warn('Экзамен не выбран, пропускаем загрузку статистики');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/statistics`, {
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.warn('Не авторизован для загрузки статистики');
+                        return;
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                state.stats = data.overall || {};
+                state.sections = data.sections || [];
+
+                if (data.overall) {
+                    document.getElementById('stat-total').textContent = data.overall.total_verified || 0;
+                    document.getElementById('stat-mastered').textContent = data.overall.mastered || 0;
+                    document.getElementById('stat-attempted').textContent = data.overall.attempted || 0;
+                    document.getElementById('stat-accuracy').textContent = `${data.overall.accuracy || 0}%`;
+
+                    document.getElementById('test-stat-total').textContent = data.overall.total_verified || 0;
+                    document.getElementById('test-stat-mastered').textContent = data.overall.mastered || 0;
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        async function loadQuestions() {
+            if (!state.currentExam) {
+                console.warn('Экзамен не выбран, пропускаем загрузку вопросов');
+                return;
+            }
+
+            try {
+                const params = new URLSearchParams({
+                    hide_mastered: 'true',
+                    section: '',
+                    status: '',
+                    search: ''
+                });
+
+                const response = await fetch(`${API_BASE}/questions?${params}`, {
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        alert('Требуется авторизация. Перезагрузите приложение.');
+                        return;
+                    }
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const data = await response.json();
+                state.questions = data.questions || [];
+                state.filteredQuestions = data.questions || [];
+
+                renderQuestionList();
+            } catch (error) {
+                console.error('Error loading questions:', error);
+                alert('Ошибка загрузки вопросов: ' + (error.message || 'Неизвестная ошибка'));
+            }
+        }
+
+        async function toggleMastered(questionId, mastered) {
+            try {
+                await fetch(`${API_BASE}/question/${questionId}/mastered`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
+                    body: JSON.stringify({mastered})
+                });
+                await loadStatistics();
+            } catch (error) {
+                console.error('Error toggling mastered:', error);
+                alert('Ошибка обновления статуса');
+            }
+        }
+
+        // Mode switching
+        function switchMode(mode) {
+            if (state.testActive && mode !== 'test') {
+                const confirmed = confirm('Прервать тестирование? Текущий прогресс теста будет потерян.');
+                if (confirmed) {
+                    state.testActive = false;
+                    doSwitchMode(mode);
+                }
+                return;
+            }
+            doSwitchMode(mode);
+        }
+
+        function doSwitchMode(mode) {
+            state.currentMode = mode;
+
+            document.querySelectorAll('.header-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.mode === mode);
+            });
+
+            const homePages = {
+                'main': 'main-home',
+                'test': 'test-home',
+                'result': 'result-home'
+            };
+
+            goToPage(homePages[mode]);
+        }
+
+        // Page navigation
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            state.currentPage = pageId;
+
+            updateBackButton();
+
+            if (pageId === 'main-questions') {
+                renderQuestionList();
+            } else if (pageId === 'result-questions') {
+                renderResultQuestionList();
+            } else if (pageId === 'result-home') {
+                renderResultHome();
+            }
+        }
+
+        // Render functions
+        function renderSections() {
+            if (!state.sections || state.sections.length === 0) {
+                document.getElementById('section-list').innerHTML = '<div style="padding: 16px; text-align: center; color: var(--tg-theme-hint-color);">Нет разделов</div>';
+                document.getElementById('test-section-list').innerHTML = '<div style="padding: 16px; text-align: center; color: var(--tg-theme-hint-color);">Нет разделов</div>';
+                return;
+            }
+
+            const html = state.sections.map(section => {
+                const sectionNum = section.section_number !== undefined ? section.section_number : section.number;
+                const sectionName = section.name || `Раздел ${sectionNum}`;
+                const mastered = section.mastered || 0;
+                const total = section.total || 0;
+                const masteredPercent = section.mastered_percent || 0;
+
+                return `
+                    <div class="section-item" onclick="goToSectionQuestions(${sectionNum})">
+                        <div class="section-name">${sectionNum}. ${sectionName}</div>
+                        <div class="section-progress">
+                            <div class="section-progress-bar" style="width: ${masteredPercent}%"></div>
+                        </div>
+                        <div class="section-stats">${mastered}/${total}</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('section-list').innerHTML = html;
+
+            const testHtml = state.sections.map(section => {
+                const sectionNum = section.section_number !== undefined ? section.section_number : section.number;
+                const sectionName = section.name || `Раздел ${sectionNum}`;
+                const mastered = section.mastered || 0;
+                const total = section.total || 0;
+                const masteredPercent = section.mastered_percent || 0;
+
+                return `
+                    <div class="section-item" onclick="startSectionTest(${sectionNum}, '${sectionName}')">
+                        <div class="section-name">${sectionNum}. ${sectionName}</div>
+                        <div class="section-progress">
+                            <div class="section-progress-bar" style="width: ${masteredPercent}%"></div>
+                        </div>
+                        <div class="section-stats">${mastered}/${total}</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('test-section-list').innerHTML = testHtml;
+        }
+
+        function renderQuestionList() {
+            const list = document.getElementById('main-question-list');
+            const count = document.getElementById('main-question-count');
+
+            count.textContent = `${state.filteredQuestions.length} вопросов`;
+
+            list.innerHTML = state.filteredQuestions.map((q, idx) => {
+                const progress = q.progress || {};
+                return `
+                    <div class="question-item" onclick="openMainQuestion(${idx})">
+                        <div class="question-number">${q.question_number || q.id.slice(0,8)}</div>
+                        <div class="question-text">${escapeHtml(q.text)}</div>
+                        <div class="question-meta">
+                            ${progress.mastered ? '<span class="badge badge-mastered">✓ Усвоен</span>' : ''}
+                            ${progress.attempts > 0 ? `<span class="badge badge-attempted">Попыток: ${progress.attempts}</span>` : ''}
+                            ${progress.attempts > 0 && progress.total_correct < progress.attempts ? '<span class="badge badge-error">Есть ошибки</span>' : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openMainQuestion(index) {
+            state.currentQuestionIndex = index;
+            state.mainSelectedAnswer = null;
+            state.mainChecked = false;
+            renderMainQuestionCard();
+            goToPage('main-card');
+        }
+
+        function renderMainQuestionCard() {
+            const q = state.filteredQuestions[state.currentQuestionIndex];
+            if (!q) return;
+
+            const progress = q.progress || {};
+            const total = state.filteredQuestions.length;
+
+            document.getElementById('main-nav-info').textContent = `${state.currentQuestionIndex + 1} / ${total}`;
+
+            let answersHtml = q.answers.map(a => {
+                let cls = '';
+                if (state.mainChecked) {
+                    if (a.is_correct) cls = 'correct';
+                    else if (state.mainSelectedAnswer === a.id) cls = 'incorrect selected';
+                } else if (state.mainSelectedAnswer === a.id) {
+                    cls = 'selected';
+                }
+
+                return `
+                    <div class="answer-item ${cls} ${state.mainChecked ? 'disabled' : ''}"
+                         onclick="${state.mainChecked ? '' : `selectMainAnswer('${a.id}')`}">
+                        <div class="answer-radio"></div>
+                        <div class="answer-text">${escapeHtml(a.text)}</div>
+                    </div>
+                `;
+            }).join('');
+
+            let resultHtml = '';
+            if (state.mainChecked) {
+                const isCorrect = q.answers.find(a => a.id === state.mainSelectedAnswer)?.is_correct;
+                resultHtml = `
+                    <div class="question-result ${isCorrect ? 'correct' : 'incorrect'}">
+                        <div class="question-result-icon">${isCorrect ? '✓' : '✗'}</div>
+                        <div class="question-result-text">${isCorrect ? 'Правильно!' : 'Неправильно'}</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('main-question-card').innerHTML = `
+                <div class="question-card-number">${q.question_number || q.id.slice(0,8)}</div>
+                <div class="question-card-text">${escapeHtml(q.text)}</div>
+
+                <div class="answers-container">
+                    <div class="answers-title">Варианты ответа:</div>
+                    ${answersHtml}
+                </div>
+
+                ${resultHtml}
+
+                <div class="question-actions">
+                    ${!state.mainChecked ? `
+                        <button class="btn btn-primary" onclick="checkMainAnswer()" ${!state.mainSelectedAnswer ? 'disabled' : ''}>
+                            ✓ Проверить
+                        </button>
+                    ` : `
+                        <button class="btn btn-secondary" onclick="resetMainAnswer()">
+                            🔄 Заново
+                        </button>
+                    `}
+                    <button class="btn btn-secondary" onclick="toggleMainMastered()">
+                        ${progress.mastered ? '🔄 Снять "Усвоен"' : '✅ Усвоен'}
+                    </button>
+                </div>
+            `;
+        }
+
+        function selectMainAnswer(answerId) {
+            state.mainSelectedAnswer = answerId;
+            renderMainQuestionCard();
+        }
+
+        async function checkMainAnswer() {
+            if (!state.mainSelectedAnswer) return;
+
+            const q = state.filteredQuestions[state.currentQuestionIndex];
+
+            try {
+                await fetch(`${API_BASE}/question/${q.id}/check`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
+                    body: JSON.stringify({selected_answers: [state.mainSelectedAnswer], dont_know: false})
+                });
+
+                const response = await fetch(`${API_BASE}/question/${q.id}?show_answers=true`, {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+                q.answers = data.question.answers;
+                q.progress = data.question.progress;
+
+                state.mainChecked = true;
+                renderMainQuestionCard();
+                await loadStatistics();
+
+                haptic.notification('success');
+            } catch (error) {
+                console.error('Error checking answer:', error);
+                alert('Ошибка проверки ответа');
+            }
+        }
+
+        function resetMainAnswer() {
+            state.mainSelectedAnswer = null;
+            state.mainChecked = false;
+
+            const q = state.filteredQuestions[state.currentQuestionIndex];
+            q.answers.forEach(a => { a.is_correct = false; });
+
+            renderMainQuestionCard();
+        }
+
+        async function toggleMainMastered() {
+            const q = state.filteredQuestions[state.currentQuestionIndex];
+            const progress = q.progress || {};
+            await toggleMastered(q.id, !progress.mastered);
+            q.progress.mastered = !progress.mastered;
+            renderMainQuestionCard();
+            haptic.impact('light');
+        }
+
+        function navQuestion(dir) {
+            const total = state.filteredQuestions.length;
+            if (dir === 'first') state.currentQuestionIndex = 0;
+            else if (dir === 'last') state.currentQuestionIndex = total - 1;
+            else if (dir === 'prev' && state.currentQuestionIndex > 0) state.currentQuestionIndex--;
+            else if (dir === 'next' && state.currentQuestionIndex < total - 1) state.currentQuestionIndex++;
+
+            state.mainSelectedAnswer = null;
+            state.mainChecked = false;
+            renderMainQuestionCard();
+            haptic.impact('light');
+        }
+
+        function goToSectionQuestions(sectionNum) {
+            state.filteredQuestions = state.questions.filter(q => q.section_number === sectionNum);
+            goToPage('main-questions');
+        }
+
+        // Test mode
+        function startRandomTest() {
+            state.testSection = null;
+            startTest();
+        }
+
+        function startSectionTest(sectionNum, sectionName) {
+            state.testSection = sectionNum;
+            startTest();
+        }
+
+        async function startTest() {
+            try {
+                const params = new URLSearchParams({
+                    hide_mastered: 'true',
+                    section: state.testSection || '',
+                    status: ''
+                });
+
+                const response = await fetch(`${API_BASE}/questions?${params}`, {
+                    credentials: 'include'
+                });
+                const data = await response.json();
+
+                let questions = data.questions;
+
+                if (state.testSection === null) {
+                    const bySection = {};
+                    questions.forEach(q => {
+                        const sec = q.section_number || 0;
+                        if (!bySection[sec]) bySection[sec] = [];
+                        bySection[sec].push(q);
+                    });
+
+                    questions = Object.values(bySection).map(qs =>
+                        qs[Math.floor(Math.random() * qs.length)]
+                    );
+                }
+
+                if (questions.length === 0) {
+                    alert('Нет вопросов для теста с выбранными фильтрами');
+                    return;
+                }
+
+                state.testQuestions = questions;
+                state.testAnswers = {};
+                state.testActive = true;
+                state.testStartTime = new Date();
+                state.testCurrentIndex = 0;
+
+                goToPage('test-questions');
+                renderTestQuestionList();
+            } catch (error) {
+                console.error('Error starting test:', error);
+                alert('Ошибка запуска теста');
+            }
+        }
+
+        function confirmCancelTest() {
+            const confirmed = confirm('Прервать тестирование? Текущий прогресс теста будет потерян.');
+            if (confirmed) {
+                state.testActive = false;
+                goToPage('test-home');
+            }
+        }
+
+        function renderTestQuestionList() {
+            const answered = Object.keys(state.testAnswers).length;
+            const skipped = state.testQuestions.length - answered;
+
+            document.getElementById('test-answered').textContent = answered;
+            document.getElementById('test-skipped').textContent = skipped;
+            document.getElementById('test-question-count').textContent = `${state.testQuestions.length} вопросов`;
+
+            document.getElementById('test-question-list').innerHTML = state.testQuestions.map((q, idx) => {
+                const hasAnswer = state.testAnswers[q.id];
+
+                return `
+                    <div class="question-item ${idx === state.testCurrentIndex ? 'active' : ''}"
+                         onclick="openTestQuestion(${idx})">
+                        <div class="question-number">${q.question_number || q.id.slice(0,8)}</div>
+                        <div class="question-text">${escapeHtml(q.text)}</div>
+                        <div class="question-meta">
+                            ${hasAnswer ? '<span class="badge badge-attempted">✓ Отвечен</span>' : '<span class="badge badge-error">○ Пропущен</span>'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openTestQuestion(index) {
+            state.testCurrentIndex = index;
+            renderTestQuestionCard();
+            goToPage('test-card');
+        }
+
+        function renderTestQuestionCard() {
+            const q = state.testQuestions[state.testCurrentIndex];
+            if (!q) return;
+
+            const selectedAnswer = state.testAnswers[q.id];
+            const total = state.testQuestions.length;
+            const answered = Object.keys(state.testAnswers).length;
+
+            document.getElementById('test-nav-info').textContent = `${state.testCurrentIndex + 1} / ${total}`;
+            document.getElementById('test-card-answered').textContent = answered;
+
+            let answersHtml = q.answers.map(a => `
+                <div class="answer-item ${selectedAnswer === a.id ? 'selected' : ''}"
+                     onclick="selectTestAnswer('${a.id}')">
+                    <div class="answer-radio"></div>
+                    <div class="answer-text">${escapeHtml(a.text)}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('test-question-card').innerHTML = `
+                <div class="question-card-number">${q.question_number || q.id.slice(0,8)}</div>
+                <div class="question-card-text">${escapeHtml(q.text)}</div>
+
+                <div class="answers-container">
+                    <div class="answers-title">Выберите ответ:</div>
+                    ${answersHtml}
+                </div>
+            `;
+        }
+
+        function selectTestAnswer(answerId) {
+            const q = state.testQuestions[state.testCurrentIndex];
+            state.testAnswers[q.id] = answerId;
+            renderTestQuestionCard();
+            renderTestQuestionList();
+            haptic.impact('light');
+        }
+
+        function navTestQuestion(dir) {
+            const total = state.testQuestions.length;
+            if (dir === 'first') state.testCurrentIndex = 0;
+            else if (dir === 'last') state.testCurrentIndex = total - 1;
+            else if (dir === 'prev' && state.testCurrentIndex > 0) state.testCurrentIndex--;
+            else if (dir === 'next' && state.testCurrentIndex < total - 1) state.testCurrentIndex++;
+
+            renderTestQuestionCard();
+            haptic.impact('light');
+        }
+
+        async function finishTest() {
+            try {
+                const answersToCheck = {};
+                state.testQuestions.forEach(q => {
+                    if (state.testAnswers[q.id]) {
+                        answersToCheck[q.id] = {selected: [state.testAnswers[q.id]], dont_know: false};
+                    }
+                });
+
+                const response = await fetch(`${API_BASE}/session/results`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    credentials: 'include',
+                    body: JSON.stringify({answers: answersToCheck})
+                });
+                const data = await response.json();
+
+                state.lastResult = {
+                    questions: state.testQuestions,
+                    answers: state.testAnswers,
+                    results: data.results,
+                    summary: data.summary,
+                    startTime: state.testStartTime,
+                    duration: Math.round((new Date() - state.testStartTime) / 1000),
+                    section: state.testSection
+                };
+
+                state.testActive = false;
+
+                await loadStatistics();
+                switchMode('result');
+
+                haptic.notification('success');
+            } catch (error) {
+                console.error('Error finishing test:', error);
+                alert('Ошибка завершения теста');
+            }
+        }
+
+        // Result mode
+        function renderResultHome() {
+            if (!state.lastResult) {
+                document.getElementById('result-header').innerHTML = `
+                    <div class="result-icon">📋</div>
+                    <div class="result-title">Нет результатов</div>
+                    <div class="result-subtitle">Пройдите тест, чтобы увидеть результаты</div>
+                `;
+                document.getElementById('result-questions-btn-container').classList.add('hidden');
+                return;
+            }
+
+            const r = state.lastResult;
+            const correct = r.summary.total_correct;
+            const accuracy = r.summary.accuracy;
+            const duration = r.duration;
+            const mins = Math.floor(duration / 60);
+            const secs = duration % 60;
+
+            const isGood = accuracy >= 70;
+
+            document.getElementById('result-header').innerHTML = `
+                <div class="result-icon">${isGood ? '🎉' : '📚'}</div>
+                <div class="result-title" style="color: ${isGood ? 'var(--accent-green)' : 'var(--accent-orange)'}">
+                    ${accuracy}% правильных
+                </div>
+                <div class="result-subtitle">
+                    ${r.section ? `Раздел ${r.section}` : 'Пробный тест'} • 
+                    ${r.startTime.toLocaleString()}
+                </div>
+
+                <div class="result-details">
+                    <div class="result-detail">
+                        <div class="result-detail-value" style="color: var(--accent-green)">${correct}</div>
+                        <div class="result-detail-label">Правильных</div>
+                    </div>
+                    <div class="result-detail">
+                        <div class="result-detail-value" style="color: var(--accent-red)">${r.summary.total_answered - correct}</div>
+                        <div class="result-detail-label">Неправильных</div>
+                    </div>
+                    <div class="result-detail">
+                        <div class="result-detail-value" style="color: var(--tg-theme-hint-color)">${r.questions.length - Object.keys(r.answers).length}</div>
+                        <div class="result-detail-label">Пропущено</div>
+                    </div>
+                    <div class="result-detail">
+                        <div class="result-detail-value">${mins}:${secs.toString().padStart(2,'0')}</div>
+                        <div class="result-detail-label">Время</div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('result-questions-btn-container').classList.remove('hidden');
+        }
+
+        function renderResultQuestionList() {
+            if (!state.lastResult) return;
+
+            document.getElementById('result-question-count').textContent = `${state.lastResult.questions.length} вопросов`;
+
+            document.getElementById('result-question-list').innerHTML = state.lastResult.questions.map((q, idx) => {
+                const hasAnswer = state.lastResult.answers[q.id];
+                const result = state.lastResult.results.find(r => r.question.id === q.id);
+                const isCorrect = result?.is_correct;
+
+                let badge = '';
+                if (!hasAnswer) badge = '<span class="badge badge-error">Пропущен</span>';
+                else if (isCorrect) badge = '<span class="badge badge-mastered">✓ Верно</span>';
+                else badge = '<span class="badge badge-error">✗ Неверно</span>';
+
+                return `
+                    <div class="question-item" onclick="openResultQuestion(${idx})">
+                        <div class="question-number">${q.question_number || q.id.slice(0,8)}</div>
+                        <div class="question-text">${escapeHtml(q.text)}</div>
+                        <div class="question-meta">${badge}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openResultQuestion(index) {
+            state.resultCurrentIndex = index;
+            renderResultQuestionCard();
+            goToPage('result-card');
+        }
+
+        function renderResultQuestionCard() {
+            const q = state.lastResult.questions[state.resultCurrentIndex];
+            if (!q) return;
+
+            const result = state.lastResult.results.find(r => r.question.id === q.id);
+            const selectedAnswer = state.lastResult.answers[q.id];
+            const correctAnswers = result?.correct_answers || [];
+            const total = state.lastResult.questions.length;
+
+            document.getElementById('result-nav-info').textContent = `${state.resultCurrentIndex + 1} / ${total}`;
+
+            let answersHtml = q.answers.map(a => {
+                let cls = '';
+                if (correctAnswers.includes(a.id)) cls = 'correct';
+                else if (selectedAnswer === a.id) cls = 'incorrect selected';
+
+                return `
+                    <div class="answer-item ${cls} disabled">
+                        <div class="answer-radio"></div>
+                        <div class="answer-text">${escapeHtml(a.text)}</div>
+                    </div>
+                `;
+            }).join('');
+
+            let resultHtml = '';
+            if (result) {
+                resultHtml = `
+                    <div class="question-result ${result.is_correct ? 'correct' : 'incorrect'}">
+                        <div class="question-result-icon">${result.is_correct ? '✓' : '✗'}</div>
+                        <div class="question-result-text">${result.is_correct ? 'Правильно!' : 'Неправильно'}</div>
+                    </div>
+                `;
+            } else {
+                resultHtml = `
+                    <div class="question-result" style="background: var(--tg-theme-secondary-bg-color); border-color: var(--border-color);">
+                        <div class="question-result-icon" style="opacity: 0.5;">⊘</div>
+                        <div class="question-result-text" style="color: var(--tg-theme-hint-color);">Пропущен</div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('result-question-card').innerHTML = `
+                <div class="question-card-number">${q.question_number || q.id.slice(0,8)}</div>
+                <div class="question-card-text">${escapeHtml(q.text)}</div>
+
+                <div class="answers-container">
+                    <div class="answers-title">Ответы:</div>
+                    ${answersHtml}
+                </div>
+
+                ${resultHtml}
+            `;
+        }
+
+        function navResultQuestion(dir) {
+            const total = state.lastResult.questions.length;
+            if (dir === 'first') state.resultCurrentIndex = 0;
+            else if (dir === 'last') state.resultCurrentIndex = total - 1;
+            else if (dir === 'prev' && state.resultCurrentIndex > 0) state.resultCurrentIndex--;
+            else if (dir === 'next' && state.resultCurrentIndex < total - 1) state.resultCurrentIndex++;
+
+            renderResultQuestionCard();
+            haptic.impact('light');
+        }
+
+        // Utilities
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

@@ -7,6 +7,12 @@ services:
       - SECRET_KEY=${SECRET_KEY:-}
       - FLASK_ENV=${FLASK_ENV:-development}
       - PYTHONUNBUFFERED=1
+      # Telegram Mini App (опционально)
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TELEGRAM_AUTH_MAX_AGE_SECONDS=${TELEGRAM_AUTH_MAX_AGE_SECONDS:-86400}
+      # MAX Mini App (опционально)
+      - MAX_BOT_TOKEN=${MAX_BOT_TOKEN:-}
+      - MAX_AUTH_MAX_AGE_SECONDS=${MAX_AUTH_MAX_AGE_SECONDS:-86400}
       # Храним user secrets и банк вопросов в томе
       - SECRETS_DIR=/app/secrets
       - SECRETS_CONFIG_PATH=/app/secrets/secrets_config.json

@@ -61,6 +61,10 @@ DEFAULT_EXAM_NAME = "1С:Руководитель проекта"
 TELEGRAM_BOT_TOKEN = os.environ.get('TELEGRAM_BOT_TOKEN', '')
 TELEGRAM_AUTH_MAX_AGE_SECONDS = int(os.environ.get('TELEGRAM_AUTH_MAX_AGE_SECONDS', '86400'))
 
+# Конфигурация MAX Mini App
+MAX_BOT_TOKEN = os.environ.get('MAX_BOT_TOKEN', '')
+MAX_AUTH_MAX_AGE_SECONDS = int(os.environ.get('MAX_AUTH_MAX_AGE_SECONDS', '86400'))
+
 
 def get_question_bank(exam_name: str) -> QuestionBank:
     """Получение банка вопросов для экзамена (с кэшированием)"""
@@ -91,6 +95,48 @@ def load_secrets():
     except Exception as e:
         logging.error(f"Ошибка загрузки конфигурации Secret: {e}")
         return []
+
+
+def register_max_user(max_user_id: int, username: str = None):
+    """Регистрация MAX пользователя в secrets_config.json"""
+    user_key = f"max_{max_user_id}"
+
+    secrets_list = []
+    config_data = {}
+
+    if os.path.exists(SECRETS_CONFIG_FILE):
+        try:
+            with open(SECRETS_CONFIG_FILE, 'r', encoding='utf-8') as f:
+                config_data = json.load(f)
+                secrets_list = config_data.get("secrets", [])
+        except Exception as e:
+            logging.error(f"Ошибка чтения конфигурации: {e}")
+            secrets_list = []
+
+    if user_key in secrets_list:
+        logging.debug(f"MAX user {max_user_id} уже зарегистрирован")
+        return
+
+    secrets_list.append(user_key)
+    config_data["secrets"] = secrets_list
+
+    if "max_users" not in config_data:
+        config_data["max_users"] = {}
+
+    config_data["max_users"][str(max_user_id)] = {
+        "user_key": user_key,
+        "username": username,
+        "registered_at": datetime.now().isoformat()
+    }
+
+    try:
+        temp_file = SECRETS_CONFIG_FILE + '.tmp'
+        with open(temp_file, 'w', encoding='utf-8') as f:
+            json.dump(config_data, f, ensure_ascii=False, indent=2)
+        os.replace(temp_file, SECRETS_CONFIG_FILE)
+        logging.info(f"MAX user {max_user_id} (@{username or 'no_username'}) зарегистрирован в secrets_config.json")
+    except Exception as e:
+        logging.error(f"Ошибка сохранения конфигурации для MAX user {max_user_id}: {e}")
 
 
 def register_telegram_user(telegram_user_id: int, username: str = None):
@@ -175,6 +221,17 @@ def get_user_progress(secret: str) -> 'UserProgress':
     return user_progress_cache[secret]
 
 
+def get_max_user_progress(max_user_id: int) -> 'UserProgress':
+    """Получение или создание экземпляра UserProgress для MAX user_id"""
+    user_key = f"max_{max_user_id}"
+    if user_key not in user_progress_cache:
+        max_user_dir = os.path.join(SECRETS_DIR, user_key)
+        os.makedirs(max_user_dir, exist_ok=True)
+        progress_file = os.path.join(max_user_dir, "trainer_progress.json")
+        user_progress_cache[user_key] = UserProgress(progress_file)
+    return user_progress_cache[user_key]
+
+
 def get_telegram_user_progress(telegram_user_id: int) -> 'UserProgress':
     """Получение или создание экземпляра UserProgress для Telegram user_id"""
     # Используем префикс tg_ для Telegram пользователей
@@ -203,7 +260,11 @@ def require_auth(f):
         # Проверяем Telegram авторизацию
         telegram_user_id = session.get('telegram_user_id')
         if telegram_user_id:
-            # Telegram пользователь авторизован
+            return f(*args, **kwargs)
+        
+        # Проверяем MAX авторизацию
+        max_user_id = session.get('max_user_id')
+        if max_user_id:
             return f(*args, **kwargs)
         
         # Проверяем Secret авторизацию (для веб-версии)
@@ -418,6 +479,11 @@ def get_current_user_progress() -> UserProgress:
     if telegram_user_id:
         return get_telegram_user_progress(telegram_user_id)
     
+    # Проверяем MAX авторизацию
+    max_user_id = session.get('max_user_id')
+    if max_user_id:
+        return get_max_user_progress(max_user_id)
+    
     # Проверяем Secret авторизацию
     secret = session.get('secret')
     if secret:
@@ -436,6 +502,12 @@ def index():
 def telegram_app():
     """Telegram Mini App"""
     return render_template('telegram_trainer.html')
+
+
+@app.route('/max')
+def max_app():
+    """MAX Mini App"""
+    return render_template('max_trainer.html')
 
 
 @app.route('/api/auth/login', methods=['POST'])
@@ -499,6 +571,10 @@ def logout():
     session.pop('telegram_username', None)
     session.pop('telegram_first_name', None)
     session.pop('telegram_last_name', None)
+    session.pop('max_user_id', None)
+    session.pop('max_username', None)
+    session.pop('max_first_name', None)
+    session.pop('max_last_name', None)
     return jsonify({
         "success": True,
         "authenticated": False,
@@ -513,13 +589,15 @@ def auth_status():
     session.permanent = True
     secret = session.get('secret')
     telegram_user_id = session.get('telegram_user_id')
+    max_user_id = session.get('max_user_id')
     
-    authenticated = (secret and is_valid_secret(secret)) or bool(telegram_user_id)
+    authenticated = (secret and is_valid_secret(secret)) or bool(telegram_user_id) or bool(max_user_id)
     
     return jsonify({
         "authenticated": authenticated,
         "has_secret": bool(secret),
-        "has_telegram": bool(telegram_user_id)
+        "has_telegram": bool(telegram_user_id),
+        "has_max": bool(max_user_id)
     })
 
 
@@ -627,6 +705,98 @@ def telegram_login():
             "last_name": user_data.get('last_name')
         },
         "message": "Авторизация через Telegram успешна"
+    })
+
+
+@app.route('/api/auth/max', methods=['POST'])
+def max_login():
+    """Авторизация через MAX Mini App initData"""
+    if not MAX_BOT_TOKEN:
+        logging.error("MAX_BOT_TOKEN не установлен - проверьте переменную окружения")
+        return jsonify({
+            "error": "MAX авторизация не настроена на сервере. Установите MAX_BOT_TOKEN.",
+            "authenticated": False,
+            "debug": "MAX_BOT_TOKEN не установлен"
+        }), 500
+
+    data = request.get_json()
+    init_data = data.get('init_data', '').strip() if data else ''
+
+    if not init_data:
+        return jsonify({
+            "error": "init_data не указан",
+            "authenticated": False
+        }), 400
+
+    # Валидируем initData (алгоритм идентичен Telegram)
+    try:
+        is_valid, max_data = telegram_auth.verify_telegram_init_data(
+            init_data,
+            MAX_BOT_TOKEN,
+            MAX_AUTH_MAX_AGE_SECONDS
+        )
+
+        if not is_valid or not max_data:
+            logging.warning(f"MAX initData validation failed. init_data length: {len(init_data)}, has_token: {bool(MAX_BOT_TOKEN)}")
+            return jsonify({
+                "error": "Неверные данные авторизации MAX. Проверьте, что MAX_BOT_TOKEN установлен правильно.",
+                "authenticated": False
+            }), 401
+    except Exception as e:
+        logging.error(f"Exception during MAX initData validation: {e}", exc_info=True)
+        return jsonify({
+            "error": f"Ошибка валидации данных MAX: {str(e)}",
+            "authenticated": False
+        }), 500
+
+    # Извлекаем user_id из данных
+    user_data = max_data.get('user')
+    if not user_data:
+        logging.warning("MAX user data missing")
+        return jsonify({
+            "error": "Данные пользователя MAX не найдены. Убедитесь, что мини-приложение открыто через MAX.",
+            "authenticated": False
+        }), 401
+
+    if 'id' not in user_data:
+        logging.warning(f"MAX user data invalid - missing 'id' field. User data: {user_data}")
+        return jsonify({
+            "error": "Неверный формат данных пользователя MAX",
+            "authenticated": False
+        }), 401
+
+    max_user_id = user_data['id']
+    max_username = user_data.get('username')
+
+    # Регистрируем MAX пользователя в secrets_config.json
+    register_max_user(max_user_id, max_username)
+
+    # Создаём папку и файл прогресса для пользователя
+    get_max_user_progress(max_user_id)
+
+    # Сохраняем данные в сессии
+    session.permanent = True
+    session['max_user_id'] = max_user_id
+    session['max_username'] = max_username
+    session['max_first_name'] = user_data.get('first_name')
+    session['max_last_name'] = user_data.get('last_name')
+
+    # Очищаем другие сессии, если были
+    for key in ('secret', 'telegram_user_id', 'telegram_username', 'telegram_first_name', 'telegram_last_name'):
+        session.pop(key, None)
+
+    logging.info(f"MAX user authorized: {max_user_id} (@{max_username or 'no_username'})")
+
+    return jsonify({
+        "success": True,
+        "authenticated": True,
+        "user": {
+            "id": max_user_id,
+            "username": max_username,
+            "first_name": user_data.get('first_name'),
+            "last_name": user_data.get('last_name')
+        },
+        "message": "Авторизация через MAX успешна"
     })
 
 
