@@ -14,8 +14,10 @@ logger = logging.getLogger(__name__)
 
 
 def parse_init_data(query_string: str) -> Dict[str, str]:
-    """Парсинг query string из Telegram.WebApp.initData"""
-    return dict(urllib.parse.parse_qsl(query_string))
+    """Парсинг query string из Telegram.WebApp.initData.
+    keep_blank_values=True обязателен: пустые поля (например start_param=)
+    исключаются из хэша если не включены, что ломает валидацию MAX."""
+    return dict(urllib.parse.parse_qsl(query_string, keep_blank_values=True))
 
 
 def build_data_check_string(params: Dict[str, str]) -> str:
