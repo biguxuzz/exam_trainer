@@ -1201,6 +1201,17 @@ def get_session_results():
     })
 
 
+@app.route('/api/health')
+def health():
+    """Диагностика: версия кода и список маршрутов"""
+    routes = sorted([str(rule) for rule in app.url_map.iter_rules()])
+    return jsonify({
+        "status": "ok",
+        "build": os.environ.get('BUILD_SHA', 'unknown'),
+        "routes": routes
+    })
+
+
 if __name__ == '__main__':
     os.makedirs('templates', exist_ok=True)
     os.makedirs('static', exist_ok=True)
